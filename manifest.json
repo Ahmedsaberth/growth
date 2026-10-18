@@ -1,0 +1,27 @@
+{
+  "name": "Binance Ledger Pro — حاسبة الأرباح ونمو رأس المال",
+  "short_name": "Ledger Pro",
+  "description": "حاسبة الأرباح اليومية ومتتبع نمو رأس المال مع نسخ سحابي ومزامنة ملف الذاكرة",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#060816",
+  "theme_color": "#060816",
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
