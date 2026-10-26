@@ -445,21 +445,139 @@ tr:hover td{background:rgba(0,194,255,0.03);}
 .note-sug-btn:active{transform:scale(0.95);}
 
 /* ── PRESETS ── */
-.presets-wrap{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px;}
+.presets-wrap{
+  display:flex;
+  flex-wrap:nowrap;
+  align-items:center;
+  justify-content:space-between;
+  gap:4px;
+  margin-top:9px;
+  width:100%;
+  overflow-x:auto;
+  scrollbar-width:none;
+  -ms-overflow-style:none;
+  padding-bottom:2px;
+}
+.presets-wrap::-webkit-scrollbar{display:none;}
 .preset-btn{
-  flex:0 0 auto;padding:5px 14px;
+  flex:1 1 0;
+  min-width:34px;
+  padding:7px 2px;
   background:rgba(0,194,255,0.04);
-  border:1px solid rgba(0,194,255,0.2);
-  border-radius:20px;color:rgba(0,194,255,0.6);
-  font-size:12px;font-weight:bold;cursor:pointer;
-  transition:all .18s;font-family:'Share Tech Mono',monospace;
+  border:1px solid rgba(0,194,255,0.22);
+  border-radius:14px;
+  color:rgba(0,194,255,0.75);
+  font-size:clamp(10.5px, 2.7vw, 12.5px);
+  font-weight:bold;
+  cursor:pointer;
+  text-align:center;
+  white-space:nowrap;
+  transition:all .18s;
+  font-family:'Share Tech Mono',monospace;
 }
 .preset-btn:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(0,194,255,0.1);}
 .preset-btn.active-preset{
-  background:linear-gradient(135deg,rgba(0,194,255,0.2),rgba(123,97,255,0.1)) !important;
+  background:linear-gradient(135deg,rgba(0,194,255,0.22),rgba(123,97,255,0.14)) !important;
   color:var(--cyan) !important;
   border-color:var(--cyan) !important;
   box-shadow:var(--glow-cyan) !important;
+}
+
+/* ── AUTO PROFIT TO CAPITAL SETTING BAR ── */
+.auto-profit-setting-bar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-top:12px;
+  padding:10px 14px;
+  background:linear-gradient(135deg,rgba(0,255,178,0.05),rgba(0,194,255,0.03));
+  border:1px solid rgba(0,255,178,0.25);
+  border-radius:10px;
+  transition:all .2s ease;
+}
+.auto-profit-setting-bar.active-mode{
+  border-color:rgba(0,255,178,0.55);
+  box-shadow:0 0 14px rgba(0,255,178,0.12);
+}
+.auto-profit-info{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+  text-align:right;
+}
+.auto-profit-title{
+  font-size:12.5px;
+  font-weight:700;
+  color:var(--text);
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.auto-profit-sub{
+  font-size:10.5px;
+  color:rgba(245,247,255,0.5);
+  font-family:'Share Tech Mono',monospace;
+}
+.switch-toggle{
+  position:relative;
+  display:inline-block;
+  width:44px;
+  height:24px;
+  flex-shrink:0;
+  margin:0;
+}
+.switch-toggle input{
+  opacity:0;
+  width:0;
+  height:0;
+}
+.switch-slider{
+  position:absolute;
+  cursor:pointer;
+  inset:0;
+  background:rgba(30,42,69,0.9);
+  border:1px solid rgba(0,194,255,0.3);
+  transition:.25s;
+  border-radius:999px;
+}
+.switch-slider:before{
+  position:absolute;
+  content:"";
+  height:16px;
+  width:16px;
+  left:3px;
+  bottom:3px;
+  background:rgba(245,247,255,0.65);
+  transition:.25s;
+  border-radius:50%;
+}
+.switch-toggle input:checked + .switch-slider{
+  background:linear-gradient(135deg,rgba(0,255,178,0.3),rgba(0,194,255,0.25));
+  border-color:var(--green);
+  box-shadow:0 0 10px rgba(0,255,178,0.4);
+}
+.switch-toggle input:checked + .switch-slider:before{
+  transform:translateX(20px);
+  background:var(--green);
+  box-shadow:0 0 8px rgba(0,255,178,0.9);
+}
+.cap-added-tag{
+  display:inline-block;
+  margin-top:3px;
+  padding:1px 6px;
+  border-radius:6px;
+  font-size:9.5px;
+  font-family:'Share Tech Mono',monospace;
+  background:rgba(0,255,178,0.1);
+  color:var(--green);
+  border:1px solid rgba(0,255,178,0.3);
+  white-space:nowrap;
+}
+.badge-profit{
+  background:rgba(0,194,255,0.12);
+  color:var(--cyan);
+  border:1px solid rgba(0,194,255,0.38);
 }
 
 /* ── CGT PAGE ── */
@@ -569,6 +687,235 @@ tr:hover td{background:rgba(0,194,255,0.03);}
 }
 .cgt-chart-box h3{margin-top:0;}
 
+/* ── MONTHLY RETURNS MATRIX & ZAKAT CALCULATOR ── */
+.cgt-matrix-box{
+  background:rgba(14,19,38,0.85);
+  border:var(--border-card);
+  border-radius:16px;
+  overflow:hidden;
+  margin-bottom:20px;
+  backdrop-filter:blur(12px);
+  position:relative;
+}
+.cgt-matrix-box::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(0,194,255,0.5),rgba(0,255,178,0.4),transparent);
+}
+.cgt-matrix-header{
+  padding:16px 20px;
+  border-bottom:1px solid rgba(0,194,255,0.12);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:10px;
+}
+.cgt-matrix-header h3{
+  margin:0;
+  font-size:14px;
+}
+.matrix-table-wrap{
+  width:100%;
+  overflow-x:auto;
+}
+.matrix-table-wrap table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:620px;
+}
+.matrix-table-wrap th,.matrix-table-wrap td{
+  padding:11px 8px;
+  text-align:center;
+  border-bottom:1px solid rgba(30,42,69,0.75);
+  font-size:11.5px;
+}
+.matrix-table-wrap th{
+  color:rgba(0,194,255,0.65);
+  background:rgba(0,194,255,0.04);
+  font-family:'Share Tech Mono',monospace;
+  font-size:10px;
+  letter-spacing:0.8px;
+}
+.matrix-sub-val{
+  display:block;
+  font-size:10px;
+  color:rgba(245,247,255,0.45);
+  font-family:'Share Tech Mono',monospace;
+  margin-top:2px;
+}
+.roi-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  padding:3px 9px;
+  border-radius:999px;
+  font-family:'Share Tech Mono',monospace;
+  font-size:11px;
+  font-weight:700;
+}
+.roi-pill.pos{
+  background:rgba(0,255,178,0.1);
+  color:var(--green);
+  border:1px solid rgba(0,255,178,0.35);
+  text-shadow:0 0 6px rgba(0,255,178,0.35);
+}
+.roi-pill.neg{
+  background:rgba(255,58,110,0.1);
+  color:var(--red);
+  border:1px solid rgba(255,58,110,0.35);
+  text-shadow:0 0 6px rgba(255,58,110,0.35);
+}
+.roi-pill.neu{
+  background:rgba(0,194,255,0.08);
+  color:var(--cyan);
+  border:1px solid rgba(0,194,255,0.25);
+}
+
+/* Zakat Card */
+.zakat-card-box{
+  background:rgba(14,19,38,0.88);
+  border:1px solid rgba(0,255,178,0.28);
+  border-radius:16px;
+  margin-bottom:20px;
+  backdrop-filter:blur(12px);
+  overflow:hidden;
+  position:relative;
+  box-shadow:0 0 30px rgba(0,255,178,0.05);
+}
+.zakat-card-box::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--green),var(--cyan),transparent);
+}
+.zakat-header{
+  padding:15px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  cursor:pointer;
+  user-select:none;
+  background:linear-gradient(135deg,rgba(0,255,178,0.06),rgba(0,194,255,0.03));
+  transition:background .2s;
+}
+.zakat-header:hover{
+  background:linear-gradient(135deg,rgba(0,255,178,0.1),rgba(0,194,255,0.06));
+}
+.zakat-header-title{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-family:'Share Tech Mono',monospace;
+  font-size:14px;
+  font-weight:700;
+  color:var(--green);
+  text-shadow:0 0 8px rgba(0,255,178,0.4);
+}
+.zakat-toggle-btn{
+  font-size:11px;
+  font-family:'Share Tech Mono',monospace;
+  color:var(--cyan);
+  background:rgba(0,194,255,0.08);
+  border:1px solid rgba(0,194,255,0.3);
+  padding:4px 12px;
+  border-radius:999px;
+  transition:all .2s;
+}
+.zakat-body{
+  padding:18px 20px;
+  border-top:1px solid rgba(0,255,178,0.15);
+  display:none;
+}
+.zakat-body.open{
+  display:block;
+}
+.zakat-mode-row{
+  display:flex;
+  gap:10px;
+  margin-bottom:14px;
+  flex-wrap:wrap;
+}
+.zakat-mode-opt{
+  flex:1;
+  min-width:180px;
+  padding:10px 12px;
+  border-radius:10px;
+  border:1px solid rgba(0,194,255,0.2);
+  background:rgba(6,8,22,0.55);
+  color:rgba(245,247,255,0.7);
+  font-size:12px;
+  font-weight:700;
+  cursor:pointer;
+  text-align:center;
+  transition:all .2s;
+}
+.zakat-mode-opt.active{
+  border-color:var(--green);
+  color:var(--green);
+  background:rgba(0,255,178,0.1);
+  box-shadow:0 0 12px rgba(0,255,178,0.18);
+}
+.zakat-deduct-wrap{
+  margin-bottom:14px;
+  display:none;
+}
+.zakat-deduct-wrap.show{
+  display:block;
+}
+.zakat-net-bar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:9px 14px;
+  background:rgba(0,194,255,0.04);
+  border:1px dashed rgba(0,194,255,0.22);
+  border-radius:8px;
+  margin-bottom:14px;
+  font-size:12px;
+  font-family:'Share Tech Mono',monospace;
+}
+.zakat-currencies-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-bottom:16px;
+}
+@media(max-width:520px){
+  .zakat-currencies-grid{grid-template-columns:1fr;}
+}
+.zakat-curr-card{
+  background:rgba(6,8,22,0.7);
+  border:1px solid rgba(0,194,255,0.16);
+  border-radius:10px;
+  padding:12px 10px;
+  text-align:center;
+}
+.zakat-curr-lbl{
+  font-size:10px;
+  color:rgba(0,194,255,0.6);
+  font-family:'Share Tech Mono',monospace;
+  margin-bottom:5px;
+}
+.zakat-curr-val{
+  font-size:16px;
+  font-weight:800;
+  font-family:'Share Tech Mono',monospace;
+}
+.btn-zakat-record{
+  width:100%;
+  padding:13px;
+  background:linear-gradient(135deg,rgba(0,255,178,0.16),rgba(0,194,255,0.1));
+  color:var(--green);
+  border:1px solid rgba(0,255,178,0.45);
+  border-radius:10px;
+  font-size:13.5px;
+  font-weight:700;
+  cursor:pointer;
+  transition:all .25s;
+}
+.btn-zakat-record:hover{
+  box-shadow:var(--glow-green);
+  color:#fff;
+}
+
 /* CGT table */
 .cgt-table-box{
   background:rgba(14,19,38,0.85);
@@ -640,6 +987,17 @@ tr.expense-row:hover{background:rgba(255,58,110,0.08) !important;}
   box-shadow:0 0 10px rgba(0,194,255,0.15),inset 0 0 8px rgba(0,194,255,0.04);
   animation:pillGlow 2.5s ease-in-out infinite alternate;
   white-space:nowrap;
+  cursor:pointer;
+  text-decoration:none;
+  transition:transform .18s ease,border-color .18s ease,background .18s ease;
+}
+.egp-pill:hover{
+  border-color:var(--cyan);
+  background:rgba(0,194,255,0.16);
+  transform:translateY(-1px);
+}
+.egp-pill:active{
+  transform:scale(0.96);
 }
 @keyframes pillGlow{
   0%{box-shadow:0 0 8px rgba(0,194,255,0.15),inset 0 0 6px rgba(0,194,255,0.04);}
@@ -1023,8 +1381,9 @@ tr.expense-row:hover{background:rgba(255,58,110,0.08) !important;}
 <body>
 
 <div class="nav-bar">
-    <button class="nav-btn active" onclick="showPage('p1',this)">📈 حاسبة الأرباح</button>
-    <button class="nav-btn"        onclick="showPage('p2',this)">💰 Capital Tracker</button>
+    <button class="nav-btn active" id="navBtnP1" onclick="showPage('p1',this)">📈 حاسبة الأرباح</button>
+    <button class="nav-btn"        id="navBtnP2" onclick="showPage('p2',this)">💰 Capital Tracker</button>
+    <button class="nav-btn"        id="navBtnP3" onclick="showPage('p3',this)">⚙️ الإعدادات</button>
 </div>
 
 <!-- ══ P1 ══ -->
@@ -1032,13 +1391,13 @@ tr.expense-row:hover{background:rgba(255,58,110,0.08) !important;}
     <div class="container" id="mainContainer">
         <div class="h2-row">
             <h2>حاسبة الأرباح اليومية 📈</h2>
-            <div class="egp-pill" id="egpCircle">
+            <a href="https://www.almullaexchange.com/en/" target="_blank" rel="noopener noreferrer" class="egp-pill" id="egpCircle" onclick="openAlMullaExchange(event)" title="فتح موقع الملا للصرافة (Al Mulla Exchange)">
                 <span class="egp-pill-dot"></span>
                 <span class="egp-pill-val" id="egpMiniPrice">···</span>
                 <span class="egp-pill-unit">KWD</span>
                 <span class="egp-pill-time" id="egpMiniTime"></span>
                 <span id="egpMiniEGP" style="display:none;"></span>
-            </div>
+            </a>
         </div>
         <div class="input-group"><label>سعر الدولار</label><input type="number" id="usdPrice" step="any" oninput="saveInputs();checkLoss();updateUsdtConvert();"></div>
         <div class="usdt-convert-row">
@@ -1058,7 +1417,11 @@ tr.expense-row:hover{background:rgba(255,58,110,0.08) !important;}
                 <button type="button" class="preset-btn" onclick="setPreset(200)">200</button>
                 <button type="button" class="preset-btn" onclick="setPreset(250)">250</button>
                 <button type="button" class="preset-btn" onclick="setPreset(300)">300</button>
+                <button type="button" class="preset-btn" onclick="setPreset(350)">350</button>
+                <button type="button" class="preset-btn" onclick="setPreset(450)">450</button>
+                <button type="button" class="preset-btn" onclick="setPreset(500)">500</button>
             </div>
+
         </div>
         <div id="lossWarning" class="loss-warning">⚠️ تحذير: سعر البيع أقل من السعر الأساسي — هذه صفقة بخسارة!</div>
         <div class="btn-container">
@@ -1147,6 +1510,7 @@ tr.expense-row:hover{background:rgba(255,58,110,0.08) !important;}
             <button class="btn-cgt-add" id="addBtn" onclick="cgtAdd('deposit')">📌 تحديث رأس المال</button>
             <button class="btn-cgt-expense" id="expenseBtn" onclick="cgtAdd('expense')">➖ خصم / مصروف</button>
         </div>
+
     </div>
 
     <!-- Summary cards -->
@@ -1190,6 +1554,78 @@ tr.expense-row:hover{background:rgba(255,58,110,0.08) !important;}
         <div class="chart-container-fixed"><canvas id="cgtChart"></canvas></div>
     </div>
 
+    <!-- 📅 أولاً: مصفوفة العوائد الشهرية (Monthly Returns Matrix) -->
+    <div class="cgt-matrix-box" id="cgtMonthlyMatrixBox">
+        <div class="cgt-matrix-header">
+            <h3>📅 مصفوفة العوائد الشهرية (Monthly Returns Matrix)</h3>
+            <div style="display:flex;align-items:center;gap:8px;">
+                <span class="badge badge-deposit" id="cgtMatrixMonthsBadge">0 شهر</span>
+                <button type="button" onclick="exportMonthlyMatrixCSV()" style="flex:unset;padding:5px 12px;font-size:11px;border-radius:8px;">📤 تصدير التقرير</button>
+            </div>
+        </div>
+        <div class="matrix-table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>الشهر والسنة</th>
+                        <th>بداية الشهر (Opening)</th>
+                        <th>الأرباح المضافة</th>
+                        <th>المصروفات والمسحوبات</th>
+                        <th>نهاية الشهر (Closing)</th>
+                        <th>صافي التغير (Net)</th>
+                        <th>نسبة النمو (ROI %)</th>
+                    </tr>
+                </thead>
+                <tbody id="cgtMonthlyMatrixBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 🕌 ثانياً: حاسبة زكاة المال السنوية (2.5% Zakat Calculator) -->
+    <div class="zakat-card-box" id="zakatCalculatorCard">
+        <div class="zakat-header" onclick="toggleZakatCard()">
+            <div class="zakat-header-title">
+                <span>🕌 حاسبة زكاة المال السنوية (2.5%)</span>
+            </div>
+            <span class="zakat-toggle-btn" id="zakatToggleBtn">إظهار الحاسبة ▼</span>
+        </div>
+        <div class="zakat-body" id="zakatCardBody">
+            <div class="zakat-mode-row">
+                <div class="zakat-mode-opt active" id="zakatModeFull" onclick="setZakatMode('full')">
+                    📌 على إجمالي رأس المال الحالي
+                </div>
+                <div class="zakat-mode-opt" id="zakatModeDeduct" onclick="setZakatMode('deduct')">
+                    ➖ استثناء التزامات / ديون قبل الزكاة
+                </div>
+            </div>
+            <div class="zakat-deduct-wrap" id="zakatDeductWrap">
+                <label>خصم التزامات/ديون قبل الزكاة (USDT)</label>
+                <input type="number" id="zakatDebtInput" step="any" min="0" placeholder="أدخل قيمة الديون أو الالتزامات المستثناة بالـ USDT..." oninput="saveZakatState();updateZakatCalculator();">
+            </div>
+            <div class="zakat-net-bar">
+                <span style="color:rgba(245,247,255,0.6);">الوعاء الزكوي الصافي (بعد الاستثناء):</span>
+                <strong style="color:var(--cyan);" id="zakatNetBaseUsdt">0 USDT</strong>
+            </div>
+            <div class="zakat-currencies-grid">
+                <div class="zakat-curr-card">
+                    <div class="zakat-curr-lbl">💵 الزكاة المستحقة (USDT)</div>
+                    <div class="zakat-curr-val c-green" id="zakatValUsdt">0 USDT</div>
+                </div>
+                <div class="zakat-curr-card">
+                    <div class="zakat-curr-lbl">🇰🇼 بالدينار الكويتي (KWD)</div>
+                    <div class="zakat-curr-val c-yellow" id="zakatValKwd">0 KWD</div>
+                </div>
+                <div class="zakat-curr-card">
+                    <div class="zakat-curr-lbl">🇪🇬 بالجنيه المصري (EGP)</div>
+                    <div class="zakat-curr-val c-orange" id="zakatValEgp">0 ج.م</div>
+                </div>
+            </div>
+            <button type="button" class="btn-zakat-record" onclick="recordZakatAsExpense()">
+                🕌 خصم الزكاة كمصروف في السجل
+            </button>
+        </div>
+    </div>
+
     <div class="cgt-table-box">
         <div style="display:flex;justify-content:space-between;align-items:center;padding:15px 20px;border-bottom:1px solid rgba(0,194,255,0.1);flex-wrap:wrap;gap:8px;">
             <h3 style="margin:0;">📋 سجل الإدخالات</h3>
@@ -1204,6 +1640,7 @@ tr.expense-row:hover{background:rgba(255,58,110,0.08) !important;}
         <div class="cgt-filter-bar">
             <button class="filter-btn active" onclick="cgtSetFilter('all',this)">الكل</button>
             <button class="filter-btn" onclick="cgtSetFilter('deposit',this)">📌 التحديثات فقط</button>
+            <button class="filter-btn" onclick="cgtSetFilter('profit',this)">💹 الأرباح التلقائية</button>
             <button class="filter-btn" onclick="cgtSetFilter('expense',this)">❤️ المصروفات فقط</button>
         </div>
         <table>
@@ -1221,37 +1658,6 @@ tr.expense-row:hover{background:rgba(255,58,110,0.08) !important;}
         <input type="file" id="cgtImportFile" accept=".csv" style="display:none;" onchange="cgtHandleImport(event)">
     </div>
 
-    <!-- ☁️ DUAL CLOUD AUTO-BACKUP & RESTORE BAR (AT VERY BOTTOM OF PAGE) -->
-    <div class="cloud-sync-bar" id="cloudSyncBar">
-        <div class="cloud-bar-header">
-            <div class="cloud-bar-title">
-                <span>☁️ النسخ السحابي التلقائي المزدوج (Auto-Sync)</span>
-            </div>
-            <span id="cloudGlobalBadge" class="badge badge-deposit" style="font-size:10px;">جاهز للمزامنة</span>
-        </div>
-        <div class="cloud-status-grid">
-            <div class="cloud-provider-pill" onclick="openCloudSettingsModal()" title="اضغط لفتح إعدادات GitHub Cloud">
-                <div class="cloud-provider-info">
-                    <span class="cloud-dot" id="ghStatusDot"></span>
-                    <span>🐙 GitHub Cloud</span>
-                </div>
-                <div class="cloud-meta" id="ghStatusText">غير مفعل ⚙️</div>
-            </div>
-            <div class="cloud-provider-pill" onclick="openCloudSettingsModal()" title="اضغط لفتح إعدادات Google Drive">
-                <div class="cloud-provider-info">
-                    <span class="cloud-dot" id="gdStatusDot"></span>
-                    <span>📁 Google Drive</span>
-                </div>
-                <div class="cloud-meta" id="gdStatusText">غير مفعل ⚙️</div>
-            </div>
-        </div>
-        <div class="cloud-actions-row">
-            <button type="button" class="btn-cloud-action btn-cloud-sync" onclick="triggerAutoCloudBackup('manual')">🔄 نسخ احتياطي الآن</button>
-            <button type="button" class="btn-cloud-action btn-cloud-restore" onclick="openCloudRestoreModal()">📥 استرداد من السحابة</button>
-            <button type="button" class="btn-cloud-action btn-cloud-config" onclick="openCloudSettingsModal()">⚙️ إعدادات الربط السحابي</button>
-        </div>
-    </div>
-
     <!-- CGT Edit Modal -->
     <div class="modal-overlay" id="cgtEditModal">
         <div class="modal-box">
@@ -1259,6 +1665,7 @@ tr.expense-row:hover{background:rgba(255,58,110,0.08) !important;}
             <label>نوع الإدخال</label>
             <select id="cgtEditType">
                 <option value="deposit">📌 تحديث رأس المال</option>
+                <option value="profit">💹 ربح معاملة تلقائي</option>
                 <option value="expense">❤️ خصم / مصروف</option>
             </select>
             <label>المبلغ (USDT)</label><input type="number" id="cgtEditAmount" step="any">
@@ -1271,114 +1678,186 @@ tr.expense-row:hover{background:rgba(255,58,110,0.08) !important;}
             </div>
         </div>
     </div>
-
-    <!-- Cloud Settings Modal -->
-    <div class="modal-overlay" id="cloudSettingsModal">
-        <div class="modal-box" style="max-width:480px;">
-            <h3>☁️ إعدادات النسخ السحابي التلقائي</h3>
-            <p style="font-size:11px;color:rgba(245,247,255,0.65);text-align:center;margin-top:-6px;margin-bottom:14px;">
-                🛡️ مزود بحماية ذكية: إذا حُذفت بيانات هاتفك بالخطأ، لن يقوم النظام بمسح نسختك السحابية أبداً، بل سيتيح لك استردادها فوراً.
-            </p>
-
-            <!-- GitHub Section -->
-            <div style="border:1px solid rgba(0,194,255,0.22);border-radius:10px;padding:12px;margin-bottom:14px;background:rgba(0,194,255,0.02);">
-                <div style="font-weight:700;color:var(--cyan);font-size:13px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;">
-                    <span>🐙 أولاً: الربط مع GitHub Cloud (Gist)</span>
-                    <button type="button" onclick="discoverGitHubGist()" style="flex:unset;padding:4px 10px;font-size:10px;border-radius:6px;">🔍 بحث تلقائي عن نسختي</button>
-                </div>
-                <label>GitHub Personal Access Token (بصلاحية gist)</label>
-                <input type="password" id="cfgGithubToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" style="direction:ltr;text-align:left;">
-                <label>Gist ID (يُنشأ ويُحفظ تلقائياً عند أول نسخة)</label>
-                <input type="text" id="cfgGithubGistId" placeholder="اتركه فارغاً لإنشائه أو اضغط بحث تلقائي" style="direction:ltr;text-align:left;margin-bottom:4px;">
-            </div>
-
-            <!-- Google Drive Section -->
-            <div style="border:1px solid rgba(0,255,178,0.22);border-radius:10px;padding:12px;margin-bottom:14px;background:rgba(0,255,178,0.02);">
-                <div style="font-weight:700;color:var(--green);font-size:13px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;">
-                    <span>📁 ثانياً: الربط مع Google Drive (تلقائي دائم)</span>
-                    <button type="button" onclick="toggleGDriveGuide()" style="flex:unset;padding:4px 10px;font-size:10px;border-radius:6px;color:var(--green);border-color:rgba(0,255,178,0.4);">📋 كود وطريقة التفعيل</button>
-                </div>
-                <label>رابط Google Apps Script Web App URL</label>
-                <input type="text" id="cfgGDriveUrl" placeholder="https://script.google.com/macros/s/.../exec" style="direction:ltr;text-align:left;margin-bottom:6px;">
-
-                <div id="gdriveGuideBox" style="display:none;margin-top:8px;">
-                    <div class="cloud-help-steps">
-                        1️⃣ افتح <b>script.google.com</b> وأنشئ مشروعاً جديداً وامسح الكود الموجود.<br>
-                        2️⃣ اضغط زر <b>"نسخ كود Google Drive"</b> بالأسفل والصقه هناك.<br>
-                        3️⃣ اضغط <b>Deploy &rarr; New deployment</b>، اختر النوع <b>Web app</b>، واجعل <i>Who has access</i> على <b>Anyone</b>، ثم انسخ الرابط (Web app URL) والصقه في الحقل أعلاه (يعمل مدى الحياة بدون انتهاء صلاحية!).
-                    </div>
-                    <div class="script-code-box" id="gasCodePreview"></div>
-                    <button type="button" onclick="copyGasCode()" style="width:100%;padding:8px;font-size:11px;margin-bottom:4px;">📋 نسخ كود Google Drive الجاهز</button>
-                </div>
-            </div>
-
-            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;color:#fff;margin-bottom:14px;">
-                <input type="checkbox" id="cfgSyncTradesToo" style="width:16px;height:16px;margin:0;">
-                <span>تضمين سجل المعاملات اليومية (P1) أيضاً داخل النسخة السحابية</span>
-            </label>
-
-            <div class="modal-actions">
-                <button class="btn-confirm-edit" onclick="saveCloudSettings()">حفظ الإعدادات ✅</button>
-                <button class="btn-cancel-edit" onclick="closeCloudSettingsModal()">إغلاق</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Cloud Restore Modal -->
-    <div class="modal-overlay" id="cloudRestoreModal">
-        <div class="modal-box" style="max-width:440px;">
-            <h3>📥 استرداد البيانات من السحابة</h3>
-            <p style="font-size:12px;color:rgba(245,247,255,0.7);text-align:center;margin-top:-4px;margin-bottom:16px;">
-                اختر السحابة التي تريد استرداد نسخة رأس المال (Capital Growth) منها إلى هاتفك:
-            </p>
-            <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px;">
-                <button type="button" class="btn-cloud-action btn-cloud-config" style="padding:14px;font-size:13px;" onclick="restoreFromGitHub()">
-                    🐙 استرداد النسخة الاحتياطية من GitHub Cloud
-                </button>
-                <button type="button" class="btn-cloud-action btn-cloud-sync" style="padding:14px;font-size:13px;" onclick="restoreFromGoogleDrive()">
-                    📁 استرداد النسخة الاحتياطية من Google Drive
-                </button>
-            </div>
-            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;color:#fff;margin-bottom:14px;">
-                <input type="checkbox" id="restoreMergeMode" style="width:16px;height:16px;margin:0;">
-                <span>دمج مع البيانات الحالية في الهاتف (بدلاً من استبدالها بالكامل)</span>
-            </label>
-            <div class="modal-actions">
-                <button class="btn-cancel-edit" onclick="closeCloudRestoreModal()">إلغاء</button>
-            </div>
-        </div>
-    </div>
-
-    
-
-
-    <!-- Custom In-Page Alert Modal (Canvas & PWA Safe) -->
-    <div class="modal-overlay" id="appAlertModal" style="z-index:10000;">
-        <div class="modal-box" style="max-width:380px;">
-            <h3 id="appAlertTitle">🔔 تنبيه</h3>
-            <div class="dialog-msg-text" id="appAlertMessage"></div>
-            <div class="modal-actions">
-                <button type="button" class="btn-confirm-edit" id="appAlertOkBtn" onclick="closeAppAlert()">حسناً ✅</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Custom In-Page Confirm Modal (Canvas & PWA Safe) -->
-    <div class="modal-overlay" id="appConfirmModal" style="z-index:10001;">
-        <div class="modal-box" style="max-width:400px;">
-            <h3 id="appConfirmTitle">⚠️ تأكيد الإجراء</h3>
-            <div class="dialog-msg-text" id="appConfirmMessage"></div>
-            <div class="modal-actions">
-                <button type="button" class="btn-confirm-edit" id="appConfirmYesBtn">نعم، متابعة ✅</button>
-                <button type="button" class="btn-cancel-edit" id="appConfirmNoBtn">إلغاء</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="cloudToast" class="cloud-toast"></div>
-
 </div>
 </div><!-- end p2 -->
+
+<!-- ══ P3 الإعدادات الشاملة ══ -->
+<div class="page" id="p3">
+<div class="cgt-wrap">
+
+    <!-- 1. إعدادات النظام والأرباح ورابط شارة السعر -->
+    <div class="cgt-input-box" style="margin-bottom:20px;">
+        <h2>⚙️ إعدادات التطبيق والروابط</h2>
+
+        <!-- إعداد إضافة الأرباح إلى رأس المال تلقائياً -->
+        <div class="auto-profit-setting-bar" id="modalAutoProfitBar" style="margin-top:8px;margin-bottom:20px;">
+            <div class="auto-profit-info">
+                <div class="auto-profit-title">💹 إضافة الأرباح إلى رأس المال تلقائياً</div>
+                <div class="auto-profit-sub" id="modalAutoProfitStatusText">موقف حالياً — تُسجل الأرباح في السجل فقط دون إضافتها لرأس المال</div>
+            </div>
+            <label class="switch-toggle" title="تفعيل أو إيقاف إضافة الأرباح تلقائياً إلى رأس المال">
+                <input type="checkbox" id="cfgAutoAddProfitModal" onchange="toggleAutoAddProfit(this.checked)">
+                <span class="switch-slider"></span>
+            </label>
+        </div>
+
+        <!-- إعداد تعديل رابط الضغط على زر السعر (الملا للصرافة) -->
+        <div style="border:1px solid rgba(0,194,255,0.22);border-radius:12px;padding:16px;background:rgba(0,194,255,0.03);">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px;">
+                <span style="font-weight:700;color:var(--cyan);font-size:13.5px;">🔗 رابط زر السعر المباشر (شارة KWD في الحاسبة)</span>
+                <button type="button" onclick="resetExchangeBadgeUrl()" style="flex:unset;padding:5px 12px;font-size:11px;border-radius:8px;">🔄 استعادة رابط الملا الافتراضي</button>
+            </div>
+            <p style="font-size:11.5px;color:rgba(245,247,255,0.6);margin-top:0;margin-bottom:10px;">
+                حدد الرابط الذي يتم فتحه مباشرة عند الضغط ضغطة واحدة على كبسولة السعر (KWD) أعلى حاسبة الأرباح اليومية:
+            </p>
+            <input type="url" id="cfgExchangeBadgeUrl" placeholder="https://www.almullaexchange.com/en/" style="direction:ltr;text-align:left;margin-bottom:10px;" oninput="saveExchangeBadgeUrlLive()">
+            <div style="display:flex;gap:10px;">
+                <button type="button" class="btn-confirm-edit" onclick="saveExchangeBadgeUrl(true)">💾 حفظ الرابط</button>
+                <button type="button" class="btn-cloud-action btn-cloud-config" onclick="openAlMullaExchange()">🌐 تجربة فتح الرابط الآن</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. حالة النسخ السحابي التلقائي المزدوج والاسترداد -->
+    <div class="cloud-sync-bar" id="cloudSyncBar" style="margin-bottom:20px;">
+        <div class="cloud-bar-header">
+            <div class="cloud-bar-title">
+                <span>☁️ النسخ السحابي التلقائي المزدوج (Auto-Sync)</span>
+            </div>
+            <span id="cloudGlobalBadge" class="badge badge-deposit" style="font-size:10px;">جاهز للمزامنة</span>
+        </div>
+        <div class="cloud-status-grid">
+            <div class="cloud-provider-pill" onclick="document.getElementById('cfgGithubToken')?.focus()" title="حالة GitHub Cloud">
+                <div class="cloud-provider-info">
+                    <span class="cloud-dot" id="ghStatusDot"></span>
+                    <span>🐙 GitHub Cloud</span>
+                </div>
+                <div class="cloud-meta" id="ghStatusText">غير مفعل ⚙️</div>
+            </div>
+            <div class="cloud-provider-pill" onclick="document.getElementById('cfgGDriveUrl')?.focus()" title="حالة Google Drive">
+                <div class="cloud-provider-info">
+                    <span class="cloud-dot" id="gdStatusDot"></span>
+                    <span>📁 Google Drive</span>
+                </div>
+                <div class="cloud-meta" id="gdStatusText">غير مفعل ⚙️</div>
+            </div>
+        </div>
+        <div class="cloud-actions-row">
+            <button type="button" class="btn-cloud-action btn-cloud-sync" onclick="triggerAutoCloudBackup('manual')">🔄 نسخ احتياطي الآن</button>
+            <button type="button" class="btn-cloud-action btn-cloud-restore" onclick="openCloudRestoreModal()">📥 استرداد من السحابة</button>
+        </div>
+    </div>
+
+    <!-- 3. إعدادات الربط السحابي التفصيلية (GitHub & Google Drive) -->
+    <div class="cgt-input-box" id="cloudSettingsModal" style="margin-bottom:20px;">
+        <h3>☁️ إعدادات الربط السحابي (GitHub & Google Drive)</h3>
+        <p style="font-size:11.5px;color:rgba(245,247,255,0.65);text-align:center;margin-top:-6px;margin-bottom:16px;">
+            🛡️ مزود بحماية ذكية: إذا حُذفت بيانات هاتفك بالخطأ، لن يقوم النظام بمسح نسختك السحابية أبداً، بل سيتيح لك استردادها فوراً.
+        </p>
+
+        <!-- GitHub Section -->
+        <div style="border:1px solid rgba(0,194,255,0.22);border-radius:10px;padding:14px;margin-bottom:14px;background:rgba(0,194,255,0.02);">
+            <div style="font-weight:700;color:var(--cyan);font-size:13px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;">
+                <span>🐙 أولاً: الربط مع GitHub Cloud (Gist)</span>
+                <button type="button" onclick="discoverGitHubGist()" style="flex:unset;padding:5px 12px;font-size:10.5px;border-radius:6px;">🔍 بحث تلقائي عن نسختي</button>
+            </div>
+            <label>GitHub Personal Access Token (بصلاحية gist)</label>
+            <input type="password" id="cfgGithubToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" style="direction:ltr;text-align:left;margin-bottom:10px;">
+            <label>Gist ID (يُنشأ ويُحفظ تلقائياً عند أول نسخة)</label>
+            <input type="text" id="cfgGithubGistId" placeholder="اتركه فارغاً لإنشائه أو اضغط بحث تلقائي" style="direction:ltr;text-align:left;margin-bottom:4px;">
+        </div>
+
+        <!-- Google Drive Section -->
+        <div style="border:1px solid rgba(0,255,178,0.22);border-radius:10px;padding:14px;margin-bottom:14px;background:rgba(0,255,178,0.02);">
+            <div style="font-weight:700;color:var(--green);font-size:13px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;">
+                <span>📁 ثانياً: الربط مع Google Drive (تلقائي دائم)</span>
+                <button type="button" onclick="toggleGDriveGuide()" style="flex:unset;padding:5px 12px;font-size:10.5px;border-radius:6px;color:var(--green);border-color:rgba(0,255,178,0.4);">📋 كود وطريقة التفعيل</button>
+            </div>
+            <label>رابط Google Apps Script Web App URL</label>
+            <input type="text" id="cfgGDriveUrl" placeholder="https://script.google.com/macros/s/.../exec" style="direction:ltr;text-align:left;margin-bottom:6px;">
+
+            <div id="gdriveGuideBox" style="display:none;margin-top:8px;">
+                <div class="cloud-help-steps">
+                    1️⃣ افتح <b>script.google.com</b> وأنشئ مشروعاً جديداً وامسح الكود الموجود.<br>
+                    2️⃣ اضغط زر <b>"نسخ كود Google Drive"</b> بالأسفل والصقه هناك.<br>
+                    3️⃣ اضغط <b>Deploy &rarr; New deployment</b>، اختر النوع <b>Web app</b>، واجعل <i>Who has access</i> على <b>Anyone</b>، ثم انسخ الرابط (Web app URL) والصقه في الحقل أعلاه (يعمل مدى الحياة بدون انتهاء صلاحية!).
+                </div>
+                <div class="script-code-box" id="gasCodePreview"></div>
+                <button type="button" onclick="copyGasCode()" style="width:100%;padding:8px;font-size:11px;margin-bottom:4px;">📋 نسخ كود Google Drive الجاهز</button>
+            </div>
+        </div>
+
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12.5px;color:#fff;margin-bottom:14px;">
+            <input type="checkbox" id="cfgSyncTradesToo" style="width:16px;height:16px;margin:0;">
+            <span>تضمين سجل المعاملات اليومية (P1) أيضاً داخل النسخة السحابية</span>
+        </label>
+
+        <div class="modal-actions">
+            <button type="button" class="btn-confirm-edit" onclick="saveCloudSettings()">حفظ جميع الإعدادات ✅</button>
+        </div>
+    </div>
+
+    <!-- 4. إدارة ملفات الذاكرة المحلية والنسخ المدمجة -->
+    <div class="cgt-input-box" style="margin-bottom:24px;">
+        <h3>💾 إدارة ملفات الذاكرة والنسخ المحلية</h3>
+        <div class="cloud-actions-row" style="margin-top:10px;">
+            <button type="button" class="btn-cloud-action btn-cloud-config" onclick="exportFullMemoryFile()">📤 تنزيل ملف الذاكرة (.json)</button>
+            <button type="button" class="btn-cloud-action btn-cloud-sync" onclick="exportUpdatedHtmlFile()">📄 حفظ نسخة HTML مدمجة بالبيانات</button>
+        </div>
+    </div>
+
+</div>
+</div><!-- end p3 -->
+
+<!-- Global Modals & Toast (work across all tabs) -->
+<div class="modal-overlay" id="cloudRestoreModal">
+    <div class="modal-box" style="max-width:440px;">
+        <h3>📥 استرداد البيانات من السحابة</h3>
+        <p style="font-size:12px;color:rgba(245,247,255,0.7);text-align:center;margin-top:-4px;margin-bottom:16px;">
+            اختر السحابة التي تريد استرداد نسخة رأس المال (Capital Growth) منها إلى هاتفك:
+        </p>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px;">
+            <button type="button" class="btn-cloud-action btn-cloud-config" style="padding:14px;font-size:13px;" onclick="restoreFromGitHub()">
+                🐙 استرداد النسخة الاحتياطية من GitHub Cloud
+            </button>
+            <button type="button" class="btn-cloud-action btn-cloud-sync" style="padding:14px;font-size:13px;" onclick="restoreFromGoogleDrive()">
+                📁 استرداد النسخة الاحتياطية من Google Drive
+            </button>
+        </div>
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;color:#fff;margin-bottom:14px;">
+            <input type="checkbox" id="restoreMergeMode" style="width:16px;height:16px;margin:0;">
+            <span>دمج مع البيانات الحالية في الهاتف (بدلاً من استبدالها بالكامل)</span>
+        </label>
+        <div class="modal-actions">
+            <button class="btn-cancel-edit" onclick="closeCloudRestoreModal()">إلغاء</button>
+        </div>
+    </div>
+</div>
+
+<!-- Custom In-Page Alert Modal (Canvas & PWA Safe) -->
+<div class="modal-overlay" id="appAlertModal" style="z-index:10000;">
+    <div class="modal-box" style="max-width:380px;">
+        <h3 id="appAlertTitle">🔔 تنبيه</h3>
+        <div class="dialog-msg-text" id="appAlertMessage"></div>
+        <div class="modal-actions">
+            <button type="button" class="btn-confirm-edit" id="appAlertOkBtn" onclick="closeAppAlert()">حسناً ✅</button>
+        </div>
+    </div>
+</div>
+
+<!-- Custom In-Page Confirm Modal (Canvas & PWA Safe) -->
+<div class="modal-overlay" id="appConfirmModal" style="z-index:10001;">
+    <div class="modal-box" style="max-width:400px;">
+        <h3 id="appConfirmTitle">⚠️ تأكيد الإجراء</h3>
+        <div class="dialog-msg-text" id="appConfirmMessage"></div>
+        <div class="modal-actions">
+            <button type="button" class="btn-confirm-edit" id="appConfirmYesBtn">نعم، متابعة ✅</button>
+            <button type="button" class="btn-cancel-edit" id="appConfirmNoBtn">إلغاء</button>
+        </div>
+    </div>
+</div>
+
+<div id="cloudToast" class="cloud-toast"></div>
 
 <script>
 
@@ -1445,19 +1924,149 @@ function showAppConfirm(msg, title = '⚠️ تأكيد الإجراء') {
 function showPage(id,btn){
     document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
     document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    btn.classList.add('active');
+    const targetPage=document.getElementById(id);
+    if(targetPage)targetPage.classList.add('active');
+    if(btn){
+        btn.classList.add('active');
+    }else{
+        const mapBtn={p1:'navBtnP1',p2:'navBtnP2',p3:'navBtnP3'};
+        const b=document.getElementById(mapBtn[id]);
+        if(b)b.classList.add('active');
+    }
     if(id==='p2'){cgtRender();fetchEGPRate();if(typeof renderCloudStatusUI==='function')renderCloudStatusUI();}
+    if(id==='p3'){populateSettingsTab();if(typeof renderCloudStatusUI==='function')renderCloudStatusUI();}
 }
 
 /* ════════════════════════════════
    P1 — DAILY PROFIT CALCULATOR
 ════════════════════════════════ */
 let editingIndex=-1;
-const PRESETS=[50,100,150,200,250,300];
-window.onload=function(){loadInputs();displayHistory();cgtRender();egpMiniUpdate();setInterval(egpMiniUpdate,5000);initCloudSyncSystem();initPWASystem();};
+const PRESETS=[50,100,150,200,250,300,350,450,500];
+const AUTO_PROFIT_ENABLED_KEY='autoAddProfitToCapital_v1';
+const AUTO_PROFIT_ACTIVATED_AT_KEY='autoAddProfitActivatedAt_v1';
+const AUTO_PROFIT_PROCESSED_IDS_KEY='autoAddProfitProcessedIds_v1';
 
-/* ── EGP Circular Badge ── */
+function isAutoAddProfitEnabled(){
+    return lsGet(AUTO_PROFIT_ENABLED_KEY)==='true';
+}
+function getAutoProfitActivatedAt(){
+    return parseInt(lsGet(AUTO_PROFIT_ACTIVATED_AT_KEY)||'0',10)||0;
+}
+function getProcessedProfitTxIds(){
+    return safeJSON(lsGet(AUTO_PROFIT_PROCESSED_IDS_KEY),[]);
+}
+function markProfitTxProcessed(txId){
+    if(!txId)return;
+    const list=getProcessedProfitTxIds();
+    const sid=String(txId);
+    if(!list.includes(sid)){
+        list.push(sid);
+        lsSet(AUTO_PROFIT_PROCESSED_IDS_KEY,JSON.stringify(list));
+    }
+}
+function isProfitTxProcessed(txId){
+    if(!txId)return false;
+    const list=getProcessedProfitTxIds();
+    const sid=String(txId);
+    if(list.includes(sid))return true;
+    return cgtGetData().some(e=>String(e.sourceTxId||'')===sid);
+}
+function toggleAutoAddProfit(enabled){
+    const isEn=Boolean(enabled);
+    const wasEn=isAutoAddProfitEnabled();
+    lsSet(AUTO_PROFIT_ENABLED_KEY,isEn?'true':'false');
+    if(isEn && !wasEn){
+        // يسجل لحظة التفعيل الجديدة بحيث تُحتسب فقط المعاملات الجديدة المسجلة بعد التفعيل دون أثر رجعي
+        lsSet(AUTO_PROFIT_ACTIVATED_AT_KEY,String(Date.now()));
+    }
+    syncAutoProfitUI();
+    markLocalModified(false);
+    if(typeof showCloudToast==='function'){
+        showCloudToast(isEn
+            ? '✅ تم تفعيل إضافة الأرباح الجديدة إلى رأس المال تلقائياً'
+            : '⏸️ تم إيقاف إضافة الأرباح التلقائية إلى رأس المال');
+    }
+}
+function syncAutoProfitUI(){
+    const isEn=isAutoAddProfitEnabled();
+    const actAt=getAutoProfitActivatedAt();
+    const tm=document.getElementById('cfgAutoAddProfitModal');
+    if(tm)tm.checked=isEn;
+    const bm=document.getElementById('modalAutoProfitBar');
+    if(bm)bm.classList.toggle('active-mode',isEn);
+    const sm=document.getElementById('modalAutoProfitStatusText');
+    const timeStr=actAt?new Date(actAt).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}):'';
+    if(sm){
+        sm.textContent=isEn
+            ? `مفعل ✅ — يُضاف صافي ربح كل معاملة مربحة جديدة تلقائياً لرأس المال${timeStr?' (منذ '+timeStr+')':''}`
+            : 'موقف حالياً — تُسجل الأرباح في السجل فقط دون إضافتها لرأس المال';
+        sm.style.color=isEn?'var(--green)':'rgba(245,247,255,0.5)';
+    }
+}
+
+window.onload=function(){loadInputs();syncExchangeBadgeHref();syncAutoProfitUI();loadZakatState();populateSettingsTab();displayHistory();cgtRender();egpMiniUpdate();setInterval(egpMiniUpdate,5000);initCloudSyncSystem();initPWASystem();};
+
+/* ── EGP Circular Badge & Customizable URL ── */
+const DEFAULT_EXCHANGE_BADGE_URL='https://www.almullaexchange.com/en/';
+const EXCHANGE_BADGE_URL_KEY='exchangeBadgeTargetUrl_v1';
+
+function getExchangeBadgeUrl(){
+    const saved=(lsGet(EXCHANGE_BADGE_URL_KEY)||'').trim();
+    return saved || DEFAULT_EXCHANGE_BADGE_URL;
+}
+function syncExchangeBadgeHref(){
+    const url=getExchangeBadgeUrl();
+    const a=document.getElementById('egpCircle');
+    if(a){
+        a.href=url;
+        a.title='فتح الرابط المباشر: '+url;
+    }
+    const inp=document.getElementById('cfgExchangeBadgeUrl');
+    if(inp && document.activeElement!==inp){
+        inp.value=url;
+    }
+}
+function saveExchangeBadgeUrlLive(){
+    const inp=document.getElementById('cfgExchangeBadgeUrl');
+    if(!inp)return;
+    let val=inp.value.trim();
+    if(val && !/^https?:\/\//i.test(val)){
+        val='https://'+val;
+    }
+    lsSet(EXCHANGE_BADGE_URL_KEY, val || DEFAULT_EXCHANGE_BADGE_URL);
+    syncExchangeBadgeHref();
+}
+function saveExchangeBadgeUrl(notify=true){
+    const inp=document.getElementById('cfgExchangeBadgeUrl');
+    let val=(inp?inp.value:'').trim();
+    if(!val) val=DEFAULT_EXCHANGE_BADGE_URL;
+    if(!/^https?:\/\//i.test(val)){
+        val='https://'+val;
+    }
+    if(inp) inp.value=val;
+    lsSet(EXCHANGE_BADGE_URL_KEY, val);
+    syncExchangeBadgeHref();
+    markLocalModified(true);
+    if(notify && typeof showCloudToast==='function'){
+        showCloudToast('🔗✅ تم حفظ رابط زر السعر المباشر بنجاح!');
+    }
+}
+function resetExchangeBadgeUrl(){
+    lsSet(EXCHANGE_BADGE_URL_KEY, DEFAULT_EXCHANGE_BADGE_URL);
+    const inp=document.getElementById('cfgExchangeBadgeUrl');
+    if(inp) inp.value=DEFAULT_EXCHANGE_BADGE_URL;
+    syncExchangeBadgeHref();
+    markLocalModified(true);
+    if(typeof showCloudToast==='function'){
+        showCloudToast('🔄 تم استعادة رابط الملا للصرافة الافتراضي');
+    }
+}
+function openAlMullaExchange(e){
+    const url=getExchangeBadgeUrl();
+    if(e) e.preventDefault();
+    const win=window.open(url,'_blank','noopener,noreferrer');
+    if(!win) window.location.href=url;
+}
 async function egpMiniUpdate(){
     const priceEl=document.getElementById('egpMiniPrice');
     const timeEl=document.getElementById('egpMiniTime');
@@ -1589,7 +2198,54 @@ async function saveToHistory(){
     const amount=parseFloat(document.getElementById('totalAmount').value)||0;
     const totalProfit=parseFloat((calc.net*amount).toFixed(2));
     const now=new Date();
-    const tx={dateKey:now.toLocaleDateString('en-GB'),time:now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}),amount,sellPrice:document.getElementById('sellKwd').value,totalProfit,note:'بنكي 🏛'};
+    const nowTs=now.getTime();
+    const txId='tx_'+nowTs+'_'+Math.random().toString(36).slice(2,7);
+    const dateKey=now.toLocaleDateString('en-GB');
+    const timeStr=now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+
+    const tx={
+        id:txId,
+        createdAt:nowTs,
+        dateKey:dateKey,
+        time:timeStr,
+        amount,
+        sellPrice:document.getElementById('sellKwd').value,
+        dinarPrice:dinar,
+        totalProfit,
+        note:'بنكي 🏛',
+        addedToCapital:false
+    };
+
+    // إذا كانت خاصية إضافة الأرباح تلقائياً مفعلة، والمعاملة مربحة (صافي ربح > 0) ومسجلة بعد لحظة التفعيل ولم يسبق إضافتها
+    const autoEnabled=isAutoAddProfitEnabled();
+    const activatedAt=getAutoProfitActivatedAt();
+    if(autoEnabled && totalProfit>0 && nowTs>=activatedAt && !isProfitTxProcessed(txId)){
+        const rate=(isFinite(dinar)&&dinar>0)?dinar:0.3075;
+        const profitUsdt=parseFloat((totalProfit/rate).toFixed(3));
+        if(profitUsdt>0){
+            const cgtEntryId=nowTs+1;
+            const cgtData=cgtGetData();
+            cgtData.push({
+                id:cgtEntryId,
+                date:dateKey,
+                time:timeStr,
+                amount:profitUsdt,
+                type:'profit',
+                sourceTxId:txId,
+                profitKwd:totalProfit,
+                txAmount:amount,
+                txSellPrice:tx.sellPrice,
+                note:`ربح معاملة تلقائي (+${totalProfit.toFixed(2)} KWD | الكمية: ${amount} | بيع: ${tx.sellPrice})`
+            });
+            cgtData.sort((a,b)=>parseDatetime(a)-parseDatetime(b));
+            lsSet(CGT_KEY,JSON.stringify(cgtData));
+            markProfitTxProcessed(txId);
+            tx.addedToCapital=true;
+            tx.capitalUsdtAdded=profitUsdt;
+            tx.capitalEntryId=cgtEntryId;
+        }
+    }
+
     let h=safeJSON(lsGet('tradeHistory'), []);
     h.unshift(tx);
     lsSet('tradeHistory',JSON.stringify(h));
@@ -1597,6 +2253,9 @@ async function saveToHistory(){
     const btn=document.getElementById('saveBtn');
     btn.classList.remove('flash-save');void btn.offsetWidth;btn.classList.add('flash-save');
     displayHistory();
+    if(tx.addedToCapital && typeof showCloudToast==='function'){
+        showCloudToast(`💹 تم حفظ المعاملة وإضافة ربح +${tx.capitalUsdtAdded} USDT (+${totalProfit.toFixed(2)} KWD) إلى رأس المال`);
+    }
 }
 
 function exportCSV(){
@@ -1696,7 +2355,11 @@ function displayHistory(){
         let s=`<div class="daily-summary"><div class="daily-header"><span>📅 ${date}</span><span>إجمالي اليوم: <span class="day-total">${grouped[date].dayTotal.toLocaleString('en-US',{maximumFractionDigits:2})} KWD</span></span></div><table><thead><tr><th>الوقت</th><th>المبلغ</th><th>سعر البيع</th><th>الربح</th><th>ملاحظة</th><th>إجراءات</th></tr></thead><tbody>`;
         grouped[date].items.forEach(item=>{
             const nb=item.note?`<span class="note-badge" title="${item.note}">${item.note}</span>`:'—';
-            s+=`<tr class="row-animate"><td>${item.time}</td><td>${item.amount.toLocaleString('en-US')}</td><td>${item.sellPrice}</td><td class="profit-pos">${item.totalProfit.toLocaleString('en-US',{maximumFractionDigits:2})}</td><td>${nb}</td><td><div class="action-btns"><button class="btn-edit-row" onclick="openEditModal(${item._orig})">✏️</button><button class="btn-delete-row" onclick="deleteTransaction(${item._orig})">🗑️</button></div></td></tr>`;
+            const profitClass=item.totalProfit>=0?'profit-pos':'c-red';
+            const capTag=item.addedToCapital
+                ? `<br><span class="cap-added-tag" title="تمت إضافة هذا الربح تلقائياً إلى رأس المال (${item.capitalUsdtAdded||''} USDT)">💹 +رأس المال${item.capitalUsdtAdded?' ('+item.capitalUsdtAdded+'$)':''}</span>`
+                : '';
+            s+=`<tr class="row-animate"><td>${item.time}</td><td>${item.amount.toLocaleString('en-US')}</td><td>${item.sellPrice}</td><td class="${profitClass}">${item.totalProfit.toLocaleString('en-US',{maximumFractionDigits:2})}${capTag}</td><td>${nb}</td><td><div class="action-btns"><button class="btn-edit-row" onclick="openEditModal(${item._orig})">✏️</button><button class="btn-delete-row" onclick="deleteTransaction(${item._orig})">🗑️</button></div></td></tr>`;
         });
         s+=`</tbody></table></div>`;
         document.getElementById('logsWrapper').innerHTML+=s;
@@ -1705,7 +2368,23 @@ function displayHistory(){
     if(typeof cgtRender==='function')cgtRender();
 }
 
-async function deleteTransaction(idx){if(!(await showAppConfirm("حذف هذه المعاملة؟")))return;let h=safeJSON(lsGet('tradeHistory'), []);h.splice(idx,1);lsSet('tradeHistory',JSON.stringify(h));markLocalModified(true);displayHistory();}
+async function deleteTransaction(idx){
+    if(!(await showAppConfirm("حذف هذه المعاملة؟")))return;
+    let h=safeJSON(lsGet('tradeHistory'), []);
+    const removed=h[idx];
+    h.splice(idx,1);
+    lsSet('tradeHistory',JSON.stringify(h));
+    if(removed && (removed.addedToCapital || removed.id || removed.capitalEntryId)){
+        const cgtData=cgtGetData().filter(e=>{
+            if(removed.id && String(e.sourceTxId||'')===String(removed.id))return false;
+            if(removed.capitalEntryId && e.id===removed.capitalEntryId)return false;
+            return true;
+        });
+        lsSet(CGT_KEY,JSON.stringify(cgtData));
+    }
+    markLocalModified(true);
+    displayHistory();
+}
 
 function openEditModal(idx){
     const h=safeJSON(lsGet('tradeHistory'), []);
@@ -1727,7 +2406,31 @@ function confirmEdit(){
     const nn=document.getElementById('editNote').value.trim();
     if(isNaN(na)||!ns||isNaN(np)||!nd||!nt){showAppAlert("اكمل جميع الحقول");return;}
     let h=safeJSON(lsGet('tradeHistory'), []);
-    Object.assign(h[editingIndex],{amount:na,sellPrice:ns,totalProfit:np,dateKey:nd,time:nt,note:nn});
+    const targetTx=h[editingIndex];
+    Object.assign(targetTx,{amount:na,sellPrice:ns,totalProfit:np,dateKey:nd,time:nt,note:nn});
+    // إذا كانت المعاملة قد أُضيفت تلقائياً لرأس المال وتم تعديل ربحها، نحدّث قيد الربح المرتبط بها في رأس المال
+    if(targetTx && (targetTx.addedToCapital || targetTx.id || targetTx.capitalEntryId)){
+        let cgtData=cgtGetData();
+        const cIdx=cgtData.findIndex(e=>(targetTx.id && String(e.sourceTxId||'')===String(targetTx.id))||(targetTx.capitalEntryId && e.id===targetTx.capitalEntryId));
+        if(cIdx!==-1){
+            if(np<=0){
+                cgtData.splice(cIdx,1);
+                targetTx.addedToCapital=false;
+                delete targetTx.capitalUsdtAdded;
+            }else{
+                const rate=(isFinite(targetTx.dinarPrice)&&targetTx.dinarPrice>0)?targetTx.dinarPrice:(parseFloat(lsGet('dinar'))||0.3075);
+                const newUsdt=parseFloat((np/rate).toFixed(3));
+                cgtData[cIdx].amount=newUsdt;
+                cgtData[cIdx].date=nd;
+                cgtData[cIdx].time=nt;
+                cgtData[cIdx].profitKwd=np;
+                cgtData[cIdx].note=`ربح معاملة تلقائي (+${np.toFixed(2)} KWD | الكمية: ${na} | بيع: ${ns})`;
+                targetTx.capitalUsdtAdded=newUsdt;
+            }
+            cgtData.sort((a,b)=>parseDatetime(a)-parseDatetime(b));
+            lsSet(CGT_KEY,JSON.stringify(cgtData));
+        }
+    }
     // Re-sort so transaction moves to correct day group
     h.sort((a,b)=>p1ParseDT(b.dateKey,b.time)-p1ParseDT(a.dateKey,a.time));
     lsSet('tradeHistory',JSON.stringify(h));
@@ -1777,15 +2480,19 @@ function parseDatetime(e){
 /* 
  * Capital calculation logic:
  *   deposit  → يُعيّن رأس المال مباشرةً (آخر قيمة مُدخلة هي رأس المال الجديد)
+ *   profit   → يُضاف صافي ربح المعاملة تلقائياً إلى رأس المال الحالي
  *   expense  → يُطرح من رأس المال الحالي
  */
 function calcRunningCapital(data){
     let cap=0;
     return data.map(e=>{
-        if((e.type||'deposit')==='expense'){
-            cap=cap-e.amount;          // خصم من الرصيد الحالي
+        const t=e.type||'deposit';
+        if(t==='expense'){
+            cap=parseFloat((cap-e.amount).toFixed(3)); // خصم من الرصيد الحالي
+        } else if(t==='profit'){
+            cap=parseFloat((cap+e.amount).toFixed(3)); // إضافة ربح معاملة تلقائي إلى الرصيد الحالي
         } else {
-            cap=e.amount;              // تحديث مباشر: رأس المال = القيمة المُدخلة
+            cap=parseFloat((e.amount).toFixed(3));     // تحديث مباشر: رأس المال = القيمة المُدخلة
         }
         return cap;
     });
@@ -1944,6 +2651,8 @@ function cgtRender(){
         if(statRow)statRow.style.display='none';
         if(extraStats)extraStats.style.display=trades0.length?'grid':'none';
         if(cgtChart){cgtChart.destroy();cgtChart=null;}
+        renderMonthlyReturnsMatrix([],[],trades0);
+        updateZakatCalculator(0);
         return;
     }
 
@@ -1981,16 +2690,17 @@ function cgtRender(){
     nEl.innerText=(totalGrowth>=0?'+':'')+fmt(totalGrowth)+' USDT';
     nEl.className='ex-val '+(totalGrowth>=0?'c-green':'c-red');
 
-    // 📈 صافي الربح منذ آخر تحديث لرأس المال
-    // إذا وُجد آخر تحديث (deposit) نحسب الأرباح بعد تاريخه/وقته فقط، وإلا الإجمالي كاملاً
+    // 📈 صافي الربح منذ آخر تحديث لرأس المال (دون ازدواجية للأرباح التي أُضيفت بالفعل لرأس المال)
     const trades=safeJSON(lsGet('tradeHistory'), []);
     const lastUpdTs=lastDeposit?parseDatetime(lastDeposit):null;
     let profitSinceUpdate;
     if(lastUpdTs===null){
-        profitSinceUpdate=trades.reduce((s,t)=>s+(t.totalProfit||0),0);
+        profitSinceUpdate=trades
+            .filter(t=>!t.addedToCapital)
+            .reduce((s,t)=>s+(t.totalProfit||0),0);
     }else{
         profitSinceUpdate=trades
-            .filter(t=>p1ParseDT(t.dateKey,t.time)>lastUpdTs)
+            .filter(t=>p1ParseDT(t.dateKey,t.time)>lastUpdTs && !t.addedToCapital)
             .reduce((s,t)=>s+(t.totalProfit||0),0);
     }
     const psEl=document.getElementById('cgtProfitSinceUpdate');
@@ -2031,13 +2741,19 @@ function cgtRender(){
         const prevCap=origIdx>0?capitals[origIdx-1]:null;
         const diff=prevCap!==null?runCap-prevCap:null;
         const pct=prevCap!==null&&prevCap!==0?(diff/Math.abs(prevCap))*100:null;
-        const isExp=(entry.type||'deposit')==='expense';
+        const eType=entry.type||'deposit';
+        const isExp=eType==='expense';
+        const isProf=eType==='profit';
         const egpVal=egpRate?runCap*egpRate:null;
         const egpStr=egpVal!==null?`<span style="color:#FF9A3C;font-weight:bold;">${fmtEGP(egpVal)}</span>`:'<span style="color:rgba(245,247,255,0.25)">—</span>';
         const diffStr=diff!==null?`<span class="${diff>=0?'c-green':'c-red'}">${diff>=0?'+':''}${fmt(diff)}</span>`:'<span style="color:rgba(245,247,255,0.25)">—</span>';
         const pctStr=pct!==null?`<span class="${pct>=0?'c-green':'c-red'}">${pct>=0?'+':''}${pct.toFixed(2)}%</span>`:'<span style="color:rgba(245,247,255,0.25)">—</span>';
-        const badge=isExp?`<span class="badge badge-expense">مصروف</span>`:`<span class="badge badge-deposit">تحديث</span>`;
-        const amtDisp=isExp?`<span style="color:#FF3A6E;font-weight:bold;">-${fmt(entry.amount)}</span>`:`<span style="color:#00C2FF;font-weight:bold;">${fmt(entry.amount)}</span>`;
+        const badge=isExp
+            ? `<span class="badge badge-expense">مصروف</span>`
+            : (isProf ? `<span class="badge badge-profit">ربح تلقائي</span>` : `<span class="badge badge-deposit">تحديث</span>`);
+        const amtDisp=isExp
+            ? `<span style="color:#FF3A6E;font-weight:bold;">-${fmt(entry.amount)}</span>`
+            : (isProf ? `<span style="color:#00FFB2;font-weight:bold;">+${fmt(entry.amount)}</span>` : `<span style="color:#00C2FF;font-weight:bold;">${fmt(entry.amount)}</span>`);
         const capDisp=`<span style="color:#00C2FF;font-weight:bold;">${fmt(runCap)}</span>`;
         const noteDisp=entry.note?`<span class="note-badge" title="${entry.note}">${entry.note}</span>`:'<span style="color:rgba(245,247,255,0.25)">—</span>';
         tbody.innerHTML+=`<tr class="${isExp?'expense-row row-animate':'row-animate'}"><td>${entry.date} ${entry.time}</td><td>${badge}</td><td>${amtDisp}</td><td>${capDisp}</td><td>${egpStr}</td><td>${diffStr}</td><td>${pctStr}</td><td>${noteDisp}</td><td><div class="action-btns"><button class="btn-edit-row" onclick="cgtOpenEdit(${entry.id})">✏️</button><button class="btn-delete-row" onclick="cgtDelete(${entry.id})">🗑️</button></div></td></tr>`;
@@ -2092,8 +2808,10 @@ function cgtRender(){
                         afterLabel:function(ctx){
                             if(ctx.datasetIndex!==0)return;
                             const e=allData[ctx.dataIndex];
-                            const lines=['النوع: '+((e.type||'deposit')==='expense'?'❤️ مصروف':'📌 تحديث رأس المال')];
-                            lines.push((e.type==='expense'?'خصم: -':'رأس المال: ')+fmt(e.amount)+' USDT');
+                            const t=e.type||'deposit';
+                            const typeLbl=t==='expense'?'❤️ مصروف':(t==='profit'?'💹 ربح معاملة تلقائي':'📌 تحديث رأس المال');
+                            const lines=['النوع: '+typeLbl];
+                            lines.push((t==='expense'?'خصم: -':(t==='profit'?'ربح مضاف: +':'رأس المال: '))+fmt(e.amount)+' USDT');
                             if(e.note)lines.push('ملاحظة: '+e.note);
                             return lines;
                         }
@@ -2103,6 +2821,273 @@ function cgtRender(){
             scales:scalesObj
         }
     });
+
+    renderMonthlyReturnsMatrix(allData, capitals, trades);
+    updateZakatCalculator(currentCapital);
+}
+
+/* ════════════════════════════════════════════════════════════
+   📅 MONTHLY RETURNS MATRIX & 🕌 ZAKAT CALCULATOR LOGIC
+════════════════════════════════════════════════════════════ */
+const ZAKAT_STATE_KEY = 'zakatCalculatorState_v1';
+
+function extractYearMonth(dateStr) {
+    if (!dateStr) return null;
+    const n = String(dateStr).replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+    const p = n.split('/');
+    if (p.length !== 3) return null;
+    const m = parseInt(p[1], 10);
+    const y = parseInt(p[2], 10);
+    if (!isFinite(m) || !isFinite(y) || m < 1 || m > 12) return null;
+    return { year: y, month: m, key: `${y}-${String(m).padStart(2, '0')}` };
+}
+
+function renderMonthlyReturnsMatrix(allData, capitals, trades) {
+    const tbody = document.getElementById('cgtMonthlyMatrixBody');
+    const badge = document.getElementById('cgtMatrixMonthsBadge');
+    if (!tbody) return;
+
+    const monthNames = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+    const savedDinarRate = parseFloat(lsGet('dinar')) || parseFloat(document.getElementById('dinarPrice')?.value) || 0.3075;
+    const rateKwd = (isFinite(savedDinarRate) && savedDinarRate > 0) ? savedDinarRate : 0.3075;
+
+    // Map daily trades (P1) by month key for KWD/USDT profit reference
+    const p1ByMonth = {};
+    (trades || []).forEach(t => {
+        const ym = extractYearMonth(t.dateKey);
+        if (!ym) return;
+        if (!p1ByMonth[ym.key]) p1ByMonth[ym.key] = { kwd: 0, usdt: 0 };
+        const pKwd = parseFloat(t.totalProfit) || 0;
+        if (pKwd > 0 && !t.addedToCapital) {
+            const r = (isFinite(t.dinarPrice) && t.dinarPrice > 0) ? t.dinarPrice : rateKwd;
+            p1ByMonth[ym.key].kwd += pKwd;
+            p1ByMonth[ym.key].usdt += (pKwd / r);
+        }
+    });
+
+    if (!allData || !allData.length) {
+        tbody.innerHTML = `<tr><td colspan="7" style="padding:18px;color:rgba(245,247,255,0.4);">لا توجد بيانات مسجلة في رأس المال لعرض مصفوفة العوائد الشهرية</td></tr>`;
+        if (badge) badge.textContent = '0 شهر';
+        return;
+    }
+
+    const monthsMap = {};
+    const monthKeysOrder = [];
+
+    allData.forEach((entry, idx) => {
+        const ym = extractYearMonth(entry.date);
+        if (!ym) return;
+        const mKey = ym.key;
+        const runCap = capitals[idx];
+        const prevCap = idx > 0 ? capitals[idx - 1] : null;
+        const eType = entry.type || 'deposit';
+
+        if (!monthsMap[mKey]) {
+            monthKeysOrder.push(mKey);
+            // Opening capital: capital right before this month started, or the first entry's capital if it's the very first month
+            const openingCap = prevCap !== null ? prevCap : runCap;
+            monthsMap[mKey] = {
+                key: mKey,
+                year: ym.year,
+                month: ym.month,
+                label: `${monthNames[ym.month - 1]} ${ym.year}`,
+                opening: openingCap,
+                closing: runCap,
+                addedProfitUsdt: 0,
+                addedProfitKwd: 0,
+                expensesUsdt: 0
+            };
+        }
+
+        const mObj = monthsMap[mKey];
+        mObj.closing = runCap;
+
+        if (eType === 'expense') {
+            mObj.expensesUsdt += (parseFloat(entry.amount) || 0);
+        } else if (eType === 'profit') {
+            const u = parseFloat(entry.amount) || 0;
+            const k = (entry.profitKwd !== undefined && isFinite(parseFloat(entry.profitKwd)))
+                ? parseFloat(entry.profitKwd)
+                : (u * rateKwd);
+            mObj.addedProfitUsdt += u;
+            mObj.addedProfitKwd += k;
+        } else if (eType === 'deposit' && prevCap !== null && runCap > prevCap) {
+            // إذا قام المستخدم بتحديث رأس المال بزيادة مباشرة، نحتسب الزيادة ضمن الأرباح المضافة للشهر
+            const diffUp = runCap - prevCap;
+            mObj.addedProfitUsdt += diffUp;
+            mObj.addedProfitKwd += (diffUp * rateKwd);
+        }
+    });
+
+    // Include any non-auto-added P1 profits for each month so the matrix reflects total monthly profits accurately
+    monthKeysOrder.forEach(mKey => {
+        const mObj = monthsMap[mKey];
+        if (p1ByMonth[mKey] && mObj.addedProfitUsdt === 0) {
+            mObj.addedProfitUsdt += p1ByMonth[mKey].usdt;
+            mObj.addedProfitKwd += p1ByMonth[mKey].kwd;
+        }
+    });
+
+    // Sort newest month first
+    const sortedKeys = [...monthKeysOrder].sort((a, b) => b.localeCompare(a));
+    if (badge) badge.textContent = `${sortedKeys.length} ${sortedKeys.length === 1 ? 'شهر' : 'أشهر'}`;
+
+    window._latestMonthlyMatrixRows = sortedKeys.map(k => monthsMap[k]);
+    tbody.innerHTML = sortedKeys.map(k => {
+        const m = monthsMap[k];
+        const netChangeUsdt = m.closing - m.opening;
+        const netChangeEgp = egpRate ? (netChangeUsdt * egpRate) : null;
+        const roiPct = m.opening > 0 ? ((netChangeUsdt / m.opening) * 100) : 0;
+
+        const isPos = netChangeUsdt > 0.0001;
+        const isNeg = netChangeUsdt < -0.0001;
+        const sign = isPos ? '+' : '';
+        const netClass = isPos ? 'c-green' : (isNeg ? 'c-red' : 'c-yellow');
+        const roiClass = isPos ? 'pos' : (isNeg ? 'neg' : 'neu');
+        const statusIcon = isPos ? '🚀 رابح' : (isNeg ? '📉 تراجع' : '⚖️ مستقر');
+
+        const egpSub = netChangeEgp !== null
+            ? `<span class="matrix-sub-val" style="color:#FF9A3C;">${isPos?'+':''}${fmtEGP(netChangeEgp)} ج.م</span>`
+            : `<span class="matrix-sub-val">— ج.م</span>`;
+
+        return `<tr class="row-animate">
+            <td style="font-weight:700;color:var(--cyan);white-space:nowrap;">📅 ${m.label}</td>
+            <td style="font-family:'Share Tech Mono',monospace;">${fmt(m.opening)} USDT</td>
+            <td>
+                <span class="c-green" style="font-family:'Share Tech Mono',monospace;">+${fmt(m.addedProfitUsdt)} USDT</span>
+                <span class="matrix-sub-val" style="color:var(--green);">+${m.addedProfitKwd.toLocaleString('en-US',{maximumFractionDigits:2})} KWD</span>
+            </td>
+            <td style="font-family:'Share Tech Mono',monospace;color:var(--red);">
+                ${m.expensesUsdt > 0 ? '-' + fmt(m.expensesUsdt) + ' USDT' : '0 USDT'}
+            </td>
+            <td style="font-family:'Share Tech Mono',monospace;font-weight:700;color:#fff;">${fmt(m.closing)} USDT</td>
+            <td>
+                <span class="${netClass}" style="font-family:'Share Tech Mono',monospace;font-weight:700;">${sign}${fmt(netChangeUsdt)} USDT</span>
+                ${egpSub}
+            </td>
+            <td>
+                <span class="roi-pill ${roiClass}">${sign}${roiPct.toFixed(2)}% · ${statusIcon}</span>
+            </td>
+        </tr>`;
+    }).join('');
+}
+
+function exportMonthlyMatrixCSV() {
+    const rows = window._latestMonthlyMatrixRows || [];
+    if (!rows.length) {
+        showAppAlert('لا توجد بيانات شهرية لتصديرها');
+        return;
+    }
+    let csv = 'الشهر والسنة,بداية الشهر (USDT),الأرباح المضافة (USDT),الأرباح المضافة (KWD),المصروفات (USDT),نهاية الشهر (USDT),صافي التغير (USDT),صافي التغير (EGP),نسبة النمو (ROI %)\n';
+    rows.forEach(m => {
+        const netUsdt = m.closing - m.opening;
+        const netEgp = egpRate ? Math.round(netUsdt * egpRate) : '—';
+        const roi = m.opening > 0 ? ((netUsdt / m.opening) * 100).toFixed(2) + '%' : '0.00%';
+        csv += `"${m.label}","${m.opening.toFixed(3)}","${m.addedProfitUsdt.toFixed(3)}","${m.addedProfitKwd.toFixed(2)}","${m.expensesUsdt.toFixed(3)}","${m.closing.toFixed(3)}","${netUsdt.toFixed(3)}","${netEgp}","${roi}"\n`;
+    });
+    dl(csv, 'monthly_returns_matrix.csv');
+}
+
+function loadZakatState() {
+    const st = safeJSON(lsGet(ZAKAT_STATE_KEY), { open: false, mode: 'full', debt: '' });
+    const body = document.getElementById('zakatCardBody');
+    const btn = document.getElementById('zakatToggleBtn');
+    const debtInp = document.getElementById('zakatDebtInput');
+    if (debtInp && st.debt !== undefined) debtInp.value = st.debt;
+    if (body && btn) {
+        body.classList.toggle('open', Boolean(st.open));
+        btn.textContent = st.open ? 'طي الحاسبة ▲' : 'إظهار الحاسبة ▼';
+    }
+    setZakatMode(st.mode || 'full', true);
+}
+
+function saveZakatState() {
+    const body = document.getElementById('zakatCardBody');
+    const isFull = document.getElementById('zakatModeFull')?.classList.contains('active');
+    const debtVal = document.getElementById('zakatDebtInput')?.value || '';
+    lsSet(ZAKAT_STATE_KEY, JSON.stringify({
+        open: body ? body.classList.contains('open') : false,
+        mode: isFull ? 'full' : 'deduct',
+        debt: debtVal
+    }));
+}
+
+function toggleZakatCard() {
+    const body = document.getElementById('zakatCardBody');
+    const btn = document.getElementById('zakatToggleBtn');
+    if (!body) return;
+    const isOpen = body.classList.toggle('open');
+    if (btn) btn.textContent = isOpen ? 'طي الحاسبة ▲' : 'إظهار الحاسبة ▼';
+    saveZakatState();
+    updateZakatCalculator();
+}
+
+function setZakatMode(mode, skipSave = false) {
+    const fullBtn = document.getElementById('zakatModeFull');
+    const deductBtn = document.getElementById('zakatModeDeduct');
+    const deductWrap = document.getElementById('zakatDeductWrap');
+    const isDeduct = mode === 'deduct';
+    if (fullBtn) fullBtn.classList.toggle('active', !isDeduct);
+    if (deductBtn) deductBtn.classList.toggle('active', isDeduct);
+    if (deductWrap) deductWrap.classList.toggle('show', isDeduct);
+    if (!skipSave) saveZakatState();
+    updateZakatCalculator();
+}
+
+function getZakatCalculation(overrideCap) {
+    let curCap = overrideCap;
+    if (curCap === undefined) {
+        const allData = cgtGetData();
+        const caps = allData.length ? calcRunningCapital(allData) : [];
+        curCap = caps.length ? caps[caps.length - 1] : 0;
+    }
+    const isDeduct = document.getElementById('zakatModeDeduct')?.classList.contains('active');
+    const debt = isDeduct ? (parseFloat(document.getElementById('zakatDebtInput')?.value) || 0) : 0;
+    const netBaseUsdt = Math.max(0, curCap - Math.max(0, debt));
+    const zakatUsdt = parseFloat((netBaseUsdt * 0.025).toFixed(3));
+    const savedDinar = parseFloat(lsGet('dinar')) || parseFloat(document.getElementById('dinarPrice')?.value) || 0.3075;
+    const dinarRate = (isFinite(savedDinar) && savedDinar > 0) ? savedDinar : 0.3075;
+    const zakatKwd = parseFloat((zakatUsdt * dinarRate).toFixed(2));
+    const zakatEgp = egpRate ? Math.round(zakatUsdt * egpRate) : null;
+    return { curCap, debt, netBaseUsdt, zakatUsdt, zakatKwd, zakatEgp };
+}
+
+function updateZakatCalculator(overrideCap) {
+    const res = getZakatCalculation(overrideCap);
+    const baseEl = document.getElementById('zakatNetBaseUsdt');
+    const usdtEl = document.getElementById('zakatValUsdt');
+    const kwdEl = document.getElementById('zakatValKwd');
+    const egpEl = document.getElementById('zakatValEgp');
+    if (baseEl) baseEl.textContent = fmt(res.netBaseUsdt) + ' USDT';
+    if (usdtEl) usdtEl.textContent = fmt(res.zakatUsdt) + ' USDT';
+    if (kwdEl) kwdEl.textContent = res.zakatKwd.toLocaleString('en-US', { maximumFractionDigits: 2 }) + ' KWD';
+    if (egpEl) egpEl.textContent = res.zakatEgp !== null ? fmtEGP(res.zakatEgp) + ' ج.م' : '— ج.م';
+}
+
+async function recordZakatAsExpense() {
+    const res = getZakatCalculation();
+    if (!res.zakatUsdt || res.zakatUsdt <= 0) {
+        showAppAlert('⚠️ لا يوجد رصيد زكوي مستحق حالياً لخصمه.');
+        return;
+    }
+    const egpLine = res.zakatEgp !== null ? ('\n• بالجنيه المصري: ' + fmtEGP(res.zakatEgp) + ' ج.م') : '';
+    const confirmMsg = `🕌 هل تريد تسجيل وخصم زكاة المال السنوية (2.5%) كمصروف في سجل رأس المال؟\n\n• قيمة الزكاة: ${fmt(res.zakatUsdt)} USDT\n• بالدينار الكويتي: ${res.zakatKwd.toLocaleString('en-US',{maximumFractionDigits:2})} KWD${egpLine}\n• الملاحظة: إخراج زكاة المال 🕌`;
+    if (!(await showAppConfirm(confirmMsg, '🕌 تأكيد إخراج زكاة المال'))) return;
+
+    const now = new Date();
+    const data = cgtGetData();
+    data.push({
+        id: Date.now(),
+        date: now.toLocaleDateString('en-GB'),
+        time: now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }),
+        amount: res.zakatUsdt,
+        type: 'expense',
+        note: 'إخراج زكاة المال 🕌'
+    });
+    data.sort((a, b) => parseDatetime(a) - parseDatetime(b));
+    cgtSaveData(data);
+    cgtRender();
+    showCloudToast(`🕌✅ تم خصم زكاة المال (-${fmt(res.zakatUsdt)} USDT) وتسجيلها في السجل بنجاح`);
 }
 
 /* ════════════════════════════════════════════════════════════
@@ -2328,7 +3313,11 @@ function buildBackupPayload() {
             usd: lsGet('usd') || '',
             dinar: lsGet('dinar') || '',
             sellKwd: lsGet('sellKwd') || '',
-            amount: lsGet('amount') || ''
+            amount: lsGet('amount') || '',
+            autoAddProfitEnabled: lsGet(AUTO_PROFIT_ENABLED_KEY) || 'false',
+            autoAddProfitActivatedAt: lsGet(AUTO_PROFIT_ACTIVATED_AT_KEY) || '0',
+            autoAddProfitProcessedIds: getProcessedProfitTxIds(),
+            exchangeBadgeUrl: getExchangeBadgeUrl()
         };
     }
     return payload;
@@ -2502,19 +3491,28 @@ function triggerAutoCloudBackup(mode = 'auto') {
     }, mode === 'manual' ? 50 : 400);
 }
 
-/* ── Cloud Settings Modal Functions ── */
-function openCloudSettingsModal() {
+/* ── Settings Tab & Cloud Configuration Functions ── */
+function populateSettingsTab() {
     const cfg = getCloudConfig();
-    document.getElementById('cfgGithubToken').value = cfg.githubToken;
-    document.getElementById('cfgGithubGistId').value = cfg.githubGistId;
-    document.getElementById('cfgGDriveUrl').value = cfg.gdriveUrl;
-    document.getElementById('cfgSyncTradesToo').checked = cfg.syncTradesToo !== false;
+    const ghTok = document.getElementById('cfgGithubToken');
+    const ghGist = document.getElementById('cfgGithubGistId');
+    const gdUrl = document.getElementById('cfgGDriveUrl');
+    const syncTr = document.getElementById('cfgSyncTradesToo');
+    if (ghTok) ghTok.value = cfg.githubToken;
+    if (ghGist) ghGist.value = cfg.githubGistId;
+    if (gdUrl) gdUrl.value = cfg.gdriveUrl;
+    if (syncTr) syncTr.checked = cfg.syncTradesToo !== false;
+    syncExchangeBadgeHref();
+    syncAutoProfitUI();
     const codeEl = document.getElementById('gasCodePreview');
     if (codeEl && !codeEl.textContent) codeEl.textContent = GAS_WEBAPP_CODE;
-    document.getElementById('cloudSettingsModal').classList.add('active');
+}
+function openCloudSettingsModal() {
+    populateSettingsTab();
+    showPage('p3', document.getElementById('navBtnP3'));
 }
 function closeCloudSettingsModal() {
-    document.getElementById('cloudSettingsModal').classList.remove('active');
+    // Kept for backward compatibility
 }
 function toggleGDriveGuide() {
     const box = document.getElementById('gdriveGuideBox');
@@ -2529,6 +3527,7 @@ function copyGasCode() {
     }
 }
 function saveCloudSettings() {
+    saveExchangeBadgeUrl(false);
     const cfg = {
         githubToken: document.getElementById('cfgGithubToken').value.trim(),
         githubGistId: document.getElementById('cfgGithubGistId').value.trim(),
@@ -2634,7 +3633,14 @@ async function applyRestoredPayload(payload, sourceName, silentAuto = false) {
         if (payload.inputs.dinar !== undefined) lsSet('dinar', payload.inputs.dinar);
         if (payload.inputs.sellKwd !== undefined) lsSet('sellKwd', payload.inputs.sellKwd);
         if (payload.inputs.amount !== undefined) lsSet('amount', payload.inputs.amount);
+        if (payload.inputs.autoAddProfitEnabled !== undefined) lsSet(AUTO_PROFIT_ENABLED_KEY, payload.inputs.autoAddProfitEnabled);
+        if (payload.inputs.autoAddProfitActivatedAt !== undefined) lsSet(AUTO_PROFIT_ACTIVATED_AT_KEY, payload.inputs.autoAddProfitActivatedAt);
+        if (Array.isArray(payload.inputs.autoAddProfitProcessedIds)) lsSet(AUTO_PROFIT_PROCESSED_IDS_KEY, JSON.stringify(payload.inputs.autoAddProfitProcessedIds));
+        if (payload.inputs.exchangeBadgeUrl) lsSet(EXCHANGE_BADGE_URL_KEY, payload.inputs.exchangeBadgeUrl);
         loadInputs();
+        syncExchangeBadgeHref();
+        syncAutoProfitUI();
+        populateSettingsTab();
     }
 
     if (payload.egpRate) {
