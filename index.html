@@ -924,6 +924,17 @@ tr:hover td{background:rgba(0,194,255,0.03);}
   margin-bottom:20px;
   backdrop-filter:blur(12px);
 }
+.cgt-table-scroll{
+  width:100%;
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(0,194,255,0.35) rgba(14,19,38,0.5);
+}
+.cgt-table-scroll::-webkit-scrollbar{height:6px;}
+.cgt-table-scroll::-webkit-scrollbar-track{background:rgba(14,19,38,0.5);}
+.cgt-table-scroll::-webkit-scrollbar-thumb{background:rgba(0,194,255,0.35);border-radius:10px;}
+.cgt-table-scroll::-webkit-scrollbar-thumb:hover{background:rgba(0,194,255,0.6);}
 .cgt-table-box table{width:100%;border-collapse:collapse;}
 .cgt-table-box th,.cgt-table-box td{padding:10px 8px;text-align:center;border-bottom:1px solid rgba(14,19,38,0.9);font-size:12px;}
 .cgt-table-box th{color:rgba(0,194,255,0.5);background:rgba(0,194,255,0.04);font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;}
@@ -1554,10 +1565,10 @@ tr.expense-row:hover{background:rgba(255,58,110,0.08) !important;}
         <div class="chart-container-fixed"><canvas id="cgtChart"></canvas></div>
     </div>
 
-    <!-- 📅 أولاً: مصفوفة العوائد الشهرية (Monthly Returns Matrix) -->
+    <!-- 📅 أولاً: مصفوفة العوائد الشهرية -->
     <div class="cgt-matrix-box" id="cgtMonthlyMatrixBox">
         <div class="cgt-matrix-header">
-            <h3>📅 مصفوفة العوائد الشهرية (Monthly Returns Matrix)</h3>
+            <h3>📅 مصفوفة العوائد الشهرية</h3>
             <div style="display:flex;align-items:center;gap:8px;">
                 <span class="badge badge-deposit" id="cgtMatrixMonthsBadge">0 شهر</span>
                 <button type="button" onclick="exportMonthlyMatrixCSV()" style="flex:unset;padding:5px 12px;font-size:11px;border-radius:8px;">📤 تصدير التقرير</button>
@@ -1568,12 +1579,12 @@ tr.expense-row:hover{background:rgba(255,58,110,0.08) !important;}
                 <thead>
                     <tr>
                         <th>الشهر والسنة</th>
-                        <th>بداية الشهر (Opening)</th>
+                        <th>بداية الشهر</th>
                         <th>الأرباح المضافة</th>
                         <th>المصروفات والمسحوبات</th>
-                        <th>نهاية الشهر (Closing)</th>
-                        <th>صافي التغير (Net)</th>
-                        <th>نسبة النمو (ROI %)</th>
+                        <th>نهاية الشهر</th>
+                        <th>صافي التغير</th>
+                        <th>نسبة النمو %</th>
                     </tr>
                 </thead>
                 <tbody id="cgtMonthlyMatrixBody"></tbody>
@@ -1643,13 +1654,15 @@ tr.expense-row:hover{background:rgba(255,58,110,0.08) !important;}
             <button class="filter-btn" onclick="cgtSetFilter('profit',this)">💹 الأرباح التلقائية</button>
             <button class="filter-btn" onclick="cgtSetFilter('expense',this)">❤️ المصروفات فقط</button>
         </div>
-        <table>
-            <thead><tr>
-                <th>التاريخ والوقت</th><th>النوع</th><th>المبلغ (USDT)</th><th>رأس المال</th><th>🇪🇬 جنيه</th>
-                <th>الفرق</th><th>النسبة</th><th>ملاحظة</th><th></th>
-            </tr></thead>
-            <tbody id="cgtTableBody"></tbody>
-        </table>
+        <div class="cgt-table-scroll">
+            <table>
+                <thead><tr>
+                    <th>التاريخ والوقت</th><th>النوع</th><th>المبلغ (USDT)</th><th>رأس المال</th><th>🇪🇬 جنيه</th>
+                    <th>الفرق</th><th>النسبة</th><th>ملاحظة</th><th></th>
+                </tr></thead>
+                <tbody id="cgtTableBody"></tbody>
+            </table>
+        </div>
         <div style="display:flex;gap:0;">
             <button class="btn-cgt-clear" style="border-radius:0 0 0 16px;flex:1;" onclick="cgtClear()">🗑️ مسح السجل</button>
             <button type="button" class="btn-cgt-export" onclick="cgtExportCSV()">📤 تصدير CSV</button>
@@ -1690,13 +1703,37 @@ tr.expense-row:hover{background:rgba(255,58,110,0.08) !important;}
         <h2>⚙️ إعدادات التطبيق والروابط</h2>
 
         <!-- إعداد إضافة الأرباح إلى رأس المال تلقائياً -->
-        <div class="auto-profit-setting-bar" id="modalAutoProfitBar" style="margin-top:8px;margin-bottom:20px;">
+        <div class="auto-profit-setting-bar" id="modalAutoProfitBar" style="margin-top:8px;margin-bottom:12px;">
             <div class="auto-profit-info">
                 <div class="auto-profit-title">💹 إضافة الأرباح إلى رأس المال تلقائياً</div>
                 <div class="auto-profit-sub" id="modalAutoProfitStatusText">موقف حالياً — تُسجل الأرباح في السجل فقط دون إضافتها لرأس المال</div>
             </div>
             <label class="switch-toggle" title="تفعيل أو إيقاف إضافة الأرباح تلقائياً إلى رأس المال">
                 <input type="checkbox" id="cfgAutoAddProfitModal" onchange="toggleAutoAddProfit(this.checked)">
+                <span class="switch-slider"></span>
+            </label>
+        </div>
+
+        <!-- إعداد إظهار/إخفاء مصفوفة العوائد الشهرية -->
+        <div class="auto-profit-setting-bar active-mode" id="settingMatrixVisBar" style="margin-top:0;margin-bottom:12px;">
+            <div class="auto-profit-info">
+                <div class="auto-profit-title">📅 إظهار مصفوفة العوائد الشهرية</div>
+                <div class="auto-profit-sub" id="settingMatrixVisText">ظاهرة حالياً في صفحة Capital Tracker</div>
+            </div>
+            <label class="switch-toggle" title="إظهار أو إخفاء مصفوفة العوائد الشهرية">
+                <input type="checkbox" id="cfgShowMonthlyMatrix" checked onchange="toggleSectionVisibility('matrix', this.checked)">
+                <span class="switch-slider"></span>
+            </label>
+        </div>
+
+        <!-- إعداد إظهار/إخفاء حاسبة زكاة المال السنوية -->
+        <div class="auto-profit-setting-bar active-mode" id="settingZakatVisBar" style="margin-top:0;margin-bottom:20px;">
+            <div class="auto-profit-info">
+                <div class="auto-profit-title">🕌 إظهار حاسبة زكاة المال السنوية (2.5%)</div>
+                <div class="auto-profit-sub" id="settingZakatVisText">ظاهرة حالياً في صفحة Capital Tracker</div>
+            </div>
+            <label class="switch-toggle" title="إظهار أو إخفاء حاسبة زكاة المال السنوية">
+                <input type="checkbox" id="cfgShowZakatCalc" checked onchange="toggleSectionVisibility('zakat', this.checked)">
                 <span class="switch-slider"></span>
             </label>
         </div>
@@ -2004,7 +2041,7 @@ function syncAutoProfitUI(){
     }
 }
 
-window.onload=function(){loadInputs();syncExchangeBadgeHref();syncAutoProfitUI();loadZakatState();populateSettingsTab();displayHistory();cgtRender();egpMiniUpdate();setInterval(egpMiniUpdate,5000);initCloudSyncSystem();initPWASystem();};
+window.onload=function(){loadInputs();syncExchangeBadgeHref();syncAutoProfitUI();loadZakatState();applySectionsVisibilityUI();populateSettingsTab();displayHistory();cgtRender();egpMiniUpdate();setInterval(egpMiniUpdate,5000);initCloudSyncSystem();initPWASystem();};
 
 /* ── EGP Circular Badge & Customizable URL ── */
 const DEFAULT_EXCHANGE_BADGE_URL='https://www.almullaexchange.com/en/';
@@ -2830,6 +2867,63 @@ function cgtRender(){
    📅 MONTHLY RETURNS MATRIX & 🕌 ZAKAT CALCULATOR LOGIC
 ════════════════════════════════════════════════════════════ */
 const ZAKAT_STATE_KEY = 'zakatCalculatorState_v1';
+const SHOW_MONTHLY_MATRIX_KEY = 'showMonthlyMatrixSection_v1';
+const SHOW_ZAKAT_CALC_KEY = 'showZakatCalculatorSection_v1';
+
+function isMonthlyMatrixVisible() {
+    const val = lsGet(SHOW_MONTHLY_MATRIX_KEY);
+    return val === null ? true : val === 'true';
+}
+function isZakatCalcVisible() {
+    const val = lsGet(SHOW_ZAKAT_CALC_KEY);
+    return val === null ? true : val === 'true';
+}
+function applySectionsVisibilityUI() {
+    const showMatrix = isMonthlyMatrixVisible();
+    const showZakat = isZakatCalcVisible();
+
+    const matrixBox = document.getElementById('cgtMonthlyMatrixBox');
+    const zakatBox = document.getElementById('zakatCalculatorCard');
+    if (matrixBox) matrixBox.style.display = showMatrix ? '' : 'none';
+    if (zakatBox) zakatBox.style.display = showZakat ? '' : 'none';
+
+    const chkMatrix = document.getElementById('cfgShowMonthlyMatrix');
+    const chkZakat = document.getElementById('cfgShowZakatCalc');
+    if (chkMatrix) chkMatrix.checked = showMatrix;
+    if (chkZakat) chkZakat.checked = showZakat;
+
+    const barMatrix = document.getElementById('settingMatrixVisBar');
+    const barZakat = document.getElementById('settingZakatVisBar');
+    if (barMatrix) barMatrix.classList.toggle('active-mode', showMatrix);
+    if (barZakat) barZakat.classList.toggle('active-mode', showZakat);
+
+    const txtMatrix = document.getElementById('settingMatrixVisText');
+    const txtZakat = document.getElementById('settingZakatVisText');
+    if (txtMatrix) {
+        txtMatrix.textContent = showMatrix ? 'ظاهرة حالياً ✅ في صفحة Capital Tracker' : 'مخفية حالياً 👁️‍🗨️ من صفحة Capital Tracker';
+        txtMatrix.style.color = showMatrix ? 'var(--green)' : 'rgba(245,247,255,0.5)';
+    }
+    if (txtZakat) {
+        txtZakat.textContent = showZakat ? 'ظاهرة حالياً ✅ في صفحة Capital Tracker' : 'مخفية حالياً 👁️‍🗨️ من صفحة Capital Tracker';
+        txtZakat.style.color = showZakat ? 'var(--green)' : 'rgba(245,247,255,0.5)';
+    }
+}
+function toggleSectionVisibility(section, isVisible) {
+    const v = Boolean(isVisible);
+    if (section === 'matrix') {
+        lsSet(SHOW_MONTHLY_MATRIX_KEY, v ? 'true' : 'false');
+        if (typeof showCloudToast === 'function') {
+            showCloudToast(v ? '📅✅ تم إظهار مصفوفة العوائد الشهرية' : '📅👁️‍🗨️ تم إخفاء مصفوفة العوائد الشهرية');
+        }
+    } else if (section === 'zakat') {
+        lsSet(SHOW_ZAKAT_CALC_KEY, v ? 'true' : 'false');
+        if (typeof showCloudToast === 'function') {
+            showCloudToast(v ? '🕌✅ تم إظهار حاسبة زكاة المال السنوية' : '🕌👁️‍🗨️ تم إخفاء حاسبة زكاة المال السنوية');
+        }
+    }
+    applySectionsVisibilityUI();
+    markLocalModified(false);
+}
 
 function extractYearMonth(dateStr) {
     if (!dateStr) return null;
@@ -3317,7 +3411,9 @@ function buildBackupPayload() {
             autoAddProfitEnabled: lsGet(AUTO_PROFIT_ENABLED_KEY) || 'false',
             autoAddProfitActivatedAt: lsGet(AUTO_PROFIT_ACTIVATED_AT_KEY) || '0',
             autoAddProfitProcessedIds: getProcessedProfitTxIds(),
-            exchangeBadgeUrl: getExchangeBadgeUrl()
+            exchangeBadgeUrl: getExchangeBadgeUrl(),
+            showMonthlyMatrix: isMonthlyMatrixVisible() ? 'true' : 'false',
+            showZakatCalc: isZakatCalcVisible() ? 'true' : 'false'
         };
     }
     return payload;
@@ -3504,6 +3600,7 @@ function populateSettingsTab() {
     if (syncTr) syncTr.checked = cfg.syncTradesToo !== false;
     syncExchangeBadgeHref();
     syncAutoProfitUI();
+    applySectionsVisibilityUI();
     const codeEl = document.getElementById('gasCodePreview');
     if (codeEl && !codeEl.textContent) codeEl.textContent = GAS_WEBAPP_CODE;
 }
@@ -3637,6 +3734,9 @@ async function applyRestoredPayload(payload, sourceName, silentAuto = false) {
         if (payload.inputs.autoAddProfitActivatedAt !== undefined) lsSet(AUTO_PROFIT_ACTIVATED_AT_KEY, payload.inputs.autoAddProfitActivatedAt);
         if (Array.isArray(payload.inputs.autoAddProfitProcessedIds)) lsSet(AUTO_PROFIT_PROCESSED_IDS_KEY, JSON.stringify(payload.inputs.autoAddProfitProcessedIds));
         if (payload.inputs.exchangeBadgeUrl) lsSet(EXCHANGE_BADGE_URL_KEY, payload.inputs.exchangeBadgeUrl);
+        if (payload.inputs.showMonthlyMatrix !== undefined) lsSet(SHOW_MONTHLY_MATRIX_KEY, String(payload.inputs.showMonthlyMatrix));
+        if (payload.inputs.showZakatCalc !== undefined) lsSet(SHOW_ZAKAT_CALC_KEY, String(payload.inputs.showZakatCalc));
+        applySectionsVisibilityUI();
         loadInputs();
         syncExchangeBadgeHref();
         syncAutoProfitUI();
