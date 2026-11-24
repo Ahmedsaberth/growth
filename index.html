@@ -1429,6 +1429,7 @@ tr.expense-row:hover{background:rgba(255,58,110,0.08) !important;}
                 <button type="button" class="preset-btn" onclick="setPreset(250)">250</button>
                 <button type="button" class="preset-btn" onclick="setPreset(300)">300</button>
                 <button type="button" class="preset-btn" onclick="setPreset(350)">350</button>
+                <button type="button" class="preset-btn" onclick="setPreset(400)">400</button>
                 <button type="button" class="preset-btn" onclick="setPreset(450)">450</button>
                 <button type="button" class="preset-btn" onclick="setPreset(500)">500</button>
             </div>
@@ -1441,6 +1442,11 @@ tr.expense-row:hover{background:rgba(255,58,110,0.08) !important;}
         </div>
         <div id="quickResult" class="results-box" style="display:none;">
             <div>السعر الأساسي: <span id="basePriceLabel" style="color:#00C2FF;text-shadow:0 0 6px rgba(0,194,255,0.4);"></span></div>
+            <div id="targetPrices" style="margin-top:8px;padding:8px 10px;border:1px dashed rgba(0,194,255,0.25);background:rgba(0,194,255,0.03);border-radius:8px;font-size:14px;line-height:1.9;">
+                <div>سعر بمكسب 60 فلس: <span id="target60Label" style="color:#00C2FF;text-shadow:0 0 6px rgba(0,194,255,0.4);"></span> <span id="target60Net" style="color:#00FFB2;font-size:12px;"></span></div>
+                <div>سعر بمكسب 70 فلس: <span id="target70Label" style="color:#00C2FF;text-shadow:0 0 6px rgba(0,194,255,0.4);"></span> <span id="target70Net" style="color:#00FFB2;font-size:12px;"></span></div>
+                <div>سعر بمكسب 100 فلس: <span id="target100Label" style="color:#00C2FF;text-shadow:0 0 6px rgba(0,194,255,0.4);"></span> <span id="target100Net" style="color:#00FFB2;font-size:12px;"></span></div>
+            </div>
             <div style="margin-top:10px;">صافي ربح الوحدة: <span id="netProfitLabel" class="profit-pos"></span></div>
             <div style="margin-top:10px;border-top:1px dashed rgba(0,194,255,0.15);padding-top:10px;">
                 صافي الربح الكلي بالدينار:
@@ -1978,7 +1984,7 @@ function showPage(id,btn){
    P1 — DAILY PROFIT CALCULATOR
 ════════════════════════════════ */
 let editingIndex=-1;
-const PRESETS=[50,100,150,200,250,300,350,450,500];
+const PRESETS=[50,100,150,200,250,300,350,400,450,500];
 const AUTO_PROFIT_ENABLED_KEY='autoAddProfitToCapital_v1';
 const AUTO_PROFIT_ACTIVATED_AT_KEY='autoAddProfitActivatedAt_v1';
 const AUTO_PROFIT_PROCESSED_IDS_KEY='autoAddProfitProcessedIds_v1';
@@ -2101,8 +2107,11 @@ function resetExchangeBadgeUrl(){
 function openAlMullaExchange(e){
     const url=getExchangeBadgeUrl();
     if(e) e.preventDefault();
-    const win=window.open(url,'_blank','noopener,noreferrer');
-    if(!win) window.location.href=url;
+    // ملاحظة: تمرير 'noopener' لـ window.open يجعلها تُرجع null دائماً، فكان الكود يظن أن التبويب لم يُفتح
+    // ويفتح الموقع في نفس التبويب. لذلك نفتح تبويباً جديداً ثم نقطع الرابط مع الصفحة يدوياً.
+    const win=window.open(url,'_blank');
+    if(win){ try{ win.opener=null; }catch(_){} }
+    else window.location.href=url; // فقط إذا منع المتصفح فتح التبويب فعلاً
 }
 async function egpMiniUpdate(){
     const priceEl=document.getElementById('egpMiniPrice');
@@ -2219,6 +2228,17 @@ function calculateProfit(){
     const base=(1000/usd)*dinar,net=sell-base;
     const netTotal=parseFloat((net*amount).toFixed(4));
     document.getElementById('basePriceLabel').innerText=base.toFixed(6);
+    // أسعار مقترحة: السعر الأساسي + 60 / 70 / 100 فلس
+    [60,70,100].forEach(fils=>{
+        const lbl=document.getElementById('target'+fils+'Label');
+        if(lbl)lbl.innerText=(base+fils/1000).toFixed(6);
+        // صافي الربح الكلي لهذا السعر = (السعر المقترح − السعر الأساسي) × المبلغ
+        const netLbl=document.getElementById('target'+fils+'Net');
+        if(netLbl){
+            const t=parseFloat(((fils/1000)*amount).toFixed(4));
+            netLbl.innerText=amount>0?'(الربح: +'+t.toLocaleString('en-US',{maximumFractionDigits:4})+' KWD)':'(أدخل المبلغ)';
+        }
+    });
     document.getElementById('netProfitLabel').innerText=net.toFixed(6);
     const el=document.getElementById('netTotalLabel');
     if(el){el.innerText=(netTotal>=0?'+':'')+netTotal.toLocaleString('en-US',{maximumFractionDigits:4})+' KWD';el.style.color=netTotal>=0?'#00FFB2':'#FF3A6E';el.style.textShadow=netTotal>=0?'0 0 8px rgba(0,255,178,0.5)':'0 0 8px rgba(255,58,110,0.5)';}
