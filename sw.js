@@ -39,9 +39,7 @@ self.addEventListener('fetch', (event) => {
   // Never cache live currency APIs or Cloud Sync endpoints
   if (
     url.hostname.includes('exchangerate-api.com') ||
-    url.hostname.includes('api.github.com') ||
-    url.hostname.includes('script.google.com') ||
-    url.hostname.includes('googleusercontent.com')
+    url.hostname.includes('api.github.com')
   ) {
     event.respondWith(fetch(req).catch(() => new Response('{}', { headers: { 'Content-Type': 'application/json' } })));
     return;

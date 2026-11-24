@@ -1765,24 +1765,17 @@ tr.expense-row:hover{background:rgba(255,58,110,0.08) !important;}
     <div class="cloud-sync-bar" id="cloudSyncBar" style="margin-bottom:20px;">
         <div class="cloud-bar-header">
             <div class="cloud-bar-title">
-                <span>☁️ النسخ السحابي التلقائي المزدوج (Auto-Sync)</span>
+                <span>☁️ النسخ السحابي التلقائي (Auto-Sync)</span>
             </div>
             <span id="cloudGlobalBadge" class="badge badge-deposit" style="font-size:10px;">جاهز للمزامنة</span>
         </div>
-        <div class="cloud-status-grid">
+        <div class="cloud-status-grid" style="grid-template-columns:1fr;">
             <div class="cloud-provider-pill" onclick="document.getElementById('cfgGithubToken')?.focus()" title="حالة GitHub Cloud">
                 <div class="cloud-provider-info">
                     <span class="cloud-dot" id="ghStatusDot"></span>
                     <span>🐙 GitHub Cloud</span>
                 </div>
                 <div class="cloud-meta" id="ghStatusText">غير مفعل ⚙️</div>
-            </div>
-            <div class="cloud-provider-pill" onclick="document.getElementById('cfgGDriveUrl')?.focus()" title="حالة Google Drive">
-                <div class="cloud-provider-info">
-                    <span class="cloud-dot" id="gdStatusDot"></span>
-                    <span>📁 Google Drive</span>
-                </div>
-                <div class="cloud-meta" id="gdStatusText">غير مفعل ⚙️</div>
             </div>
         </div>
         <div class="cloud-actions-row">
@@ -1791,9 +1784,9 @@ tr.expense-row:hover{background:rgba(255,58,110,0.08) !important;}
         </div>
     </div>
 
-    <!-- 3. إعدادات الربط السحابي التفصيلية (GitHub & Google Drive) -->
+    <!-- 3. إعدادات الربط السحابي التفصيلية (GitHub) -->
     <div class="cgt-input-box" id="cloudSettingsModal" style="margin-bottom:20px;">
-        <h3>☁️ إعدادات الربط السحابي (GitHub & Google Drive)</h3>
+        <h3>☁️ إعدادات الربط السحابي (GitHub)</h3>
         <p style="font-size:11.5px;color:rgba(245,247,255,0.65);text-align:center;margin-top:-6px;margin-bottom:16px;">
             🛡️ مزود بحماية ذكية: إذا حُذفت بيانات هاتفك بالخطأ، لن يقوم النظام بمسح نسختك السحابية أبداً، بل سيتيح لك استردادها فوراً.
         </p>
@@ -1801,33 +1794,13 @@ tr.expense-row:hover{background:rgba(255,58,110,0.08) !important;}
         <!-- GitHub Section -->
         <div style="border:1px solid rgba(0,194,255,0.22);border-radius:10px;padding:14px;margin-bottom:14px;background:rgba(0,194,255,0.02);">
             <div style="font-weight:700;color:var(--cyan);font-size:13px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;">
-                <span>🐙 أولاً: الربط مع GitHub Cloud (Gist)</span>
+                <span>🐙 الربط مع GitHub Cloud (Gist)</span>
                 <button type="button" onclick="discoverGitHubGist()" style="flex:unset;padding:5px 12px;font-size:10.5px;border-radius:6px;">🔍 بحث تلقائي عن نسختي</button>
             </div>
             <label>GitHub Personal Access Token (بصلاحية gist)</label>
             <input type="password" id="cfgGithubToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" style="direction:ltr;text-align:left;margin-bottom:10px;">
             <label>Gist ID (يُنشأ ويُحفظ تلقائياً عند أول نسخة)</label>
             <input type="text" id="cfgGithubGistId" placeholder="اتركه فارغاً لإنشائه أو اضغط بحث تلقائي" style="direction:ltr;text-align:left;margin-bottom:4px;">
-        </div>
-
-        <!-- Google Drive Section -->
-        <div style="border:1px solid rgba(0,255,178,0.22);border-radius:10px;padding:14px;margin-bottom:14px;background:rgba(0,255,178,0.02);">
-            <div style="font-weight:700;color:var(--green);font-size:13px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;">
-                <span>📁 ثانياً: الربط مع Google Drive (تلقائي دائم)</span>
-                <button type="button" onclick="toggleGDriveGuide()" style="flex:unset;padding:5px 12px;font-size:10.5px;border-radius:6px;color:var(--green);border-color:rgba(0,255,178,0.4);">📋 كود وطريقة التفعيل</button>
-            </div>
-            <label>رابط Google Apps Script Web App URL</label>
-            <input type="text" id="cfgGDriveUrl" placeholder="https://script.google.com/macros/s/.../exec" style="direction:ltr;text-align:left;margin-bottom:6px;">
-
-            <div id="gdriveGuideBox" style="display:none;margin-top:8px;">
-                <div class="cloud-help-steps">
-                    1️⃣ افتح <b>script.google.com</b> وأنشئ مشروعاً جديداً وامسح الكود الموجود.<br>
-                    2️⃣ اضغط زر <b>"نسخ كود Google Drive"</b> بالأسفل والصقه هناك.<br>
-                    3️⃣ اضغط <b>Deploy &rarr; New deployment</b>، اختر النوع <b>Web app</b>، واجعل <i>Who has access</i> على <b>Anyone</b>، ثم انسخ الرابط (Web app URL) والصقه في الحقل أعلاه (يعمل مدى الحياة بدون انتهاء صلاحية!).
-                </div>
-                <div class="script-code-box" id="gasCodePreview"></div>
-                <button type="button" onclick="copyGasCode()" style="width:100%;padding:8px;font-size:11px;margin-bottom:4px;">📋 نسخ كود Google Drive الجاهز</button>
-            </div>
         </div>
 
         <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12.5px;color:#fff;margin-bottom:14px;">
@@ -1857,14 +1830,11 @@ tr.expense-row:hover{background:rgba(255,58,110,0.08) !important;}
     <div class="modal-box" style="max-width:440px;">
         <h3>📥 استرداد البيانات من السحابة</h3>
         <p style="font-size:12px;color:rgba(245,247,255,0.7);text-align:center;margin-top:-4px;margin-bottom:16px;">
-            اختر السحابة التي تريد استرداد نسخة رأس المال (Capital Growth) منها إلى هاتفك:
+            استرداد نسخة رأس المال (Capital Growth) من GitHub Cloud إلى هاتفك:
         </p>
         <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px;">
             <button type="button" class="btn-cloud-action btn-cloud-config" style="padding:14px;font-size:13px;" onclick="restoreFromGitHub()">
                 🐙 استرداد النسخة الاحتياطية من GitHub Cloud
-            </button>
-            <button type="button" class="btn-cloud-action btn-cloud-sync" style="padding:14px;font-size:13px;" onclick="restoreFromGoogleDrive()">
-                📁 استرداد النسخة الاحتياطية من Google Drive
             </button>
         </div>
         <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;color:#fff;margin-bottom:14px;">
@@ -2619,7 +2589,7 @@ function cgtConfirmEdit(){
 function cgtCloseModal(){document.getElementById('cgtEditModal').classList.remove('active');cgtEditingId=null;}
 document.getElementById('cgtEditModal').addEventListener('click',function(e){if(e.target===this)cgtCloseModal();});
 async function cgtClear(){
-    if(await showAppConfirm('⚠️ هل تريد مسح سجل رأس المال من هذا الهاتف؟\n\n🛡️ اطمئن: لن يتم مسح النسخة الاحتياطية الموجودة في السحابة (Google Drive / GitHub) حتى تتمكن من استردادها في أي وقت.')){
+    if(await showAppConfirm('⚠️ هل تريد مسح سجل رأس المال من هذا الهاتف؟\n\n🛡️ اطمئن: لن يتم مسح النسخة الاحتياطية الموجودة في السحابة (GitHub) حتى تتمكن من استردادها في أي وقت.')){
         cgtSaveData([], true);
         cgtRender();
         if(typeof showCloudToast==='function') showCloudToast('🗑️ تم مسح سجل الهاتف فقط — نسختك السحابية آمنة ☁️🛡️');
@@ -3212,65 +3182,7 @@ const CLOUD_STATE_KEY = 'binanceLedgerCloudState_v1';
 let cloudSyncTimer = null;
 let isCloudSyncing = false;
 
-const GAS_WEBAPP_CODE = `// كود Google Apps Script للنسخ الاحتياطي والاسترداد التلقائي على Google Drive
-const FOLDER_NAME = 'Binance_Ledger_Backups';
-const JSON_FILE = 'binance_ledger_cloud_backup.json';
-const CSV_FILE = 'capital_growth_latest.csv';
 
-function getOrCreateFolder() {
-  const folders = DriveApp.getFoldersByName(FOLDER_NAME);
-  return folders.hasNext() ? folders.next() : DriveApp.createFolder(FOLDER_NAME);
-}
-
-function saveOrUpdateFile(folder, filename, content, mimeType) {
-  const files = folder.getFilesByName(filename);
-  if (files.hasNext()) {
-    const file = files.next();
-    file.setContent(content);
-    return file.getId();
-  } else {
-    const file = folder.createFile(filename, content, mimeType);
-    return file.getId();
-  }
-}
-
-function doPost(e) {
-  try {
-    const folder = getOrCreateFolder();
-    const raw = e.postData.contents;
-    const payload = JSON.parse(raw);
-    // حماية السحابة من الكتابة الفارغة بالخطأ
-    if ((!payload.capitalTrackerData_v2 || payload.capitalTrackerData_v2.length === 0) && (!payload.tradeHistory || payload.tradeHistory.length === 0)) {
-      return ContentService.createTextOutput(JSON.stringify({ status: 'skipped_empty', message: 'Empty payload ignored to protect cloud backup' }))
-        .setMimeType(ContentService.MimeType.JSON);
-    }
-    const fileId = saveOrUpdateFile(folder, JSON_FILE, JSON.stringify(payload, null, 2), MimeType.PLAIN_TEXT);
-    if (payload.csvContent) {
-      saveOrUpdateFile(folder, CSV_FILE, payload.csvContent, MimeType.CSV);
-    }
-    return ContentService.createTextOutput(JSON.stringify({ status: 'ok', fileId: fileId, updatedAt: new Date().toISOString() }))
-      .setMimeType(ContentService.MimeType.JSON);
-  } catch (err) {
-    return ContentService.createTextOutput(JSON.stringify({ status: 'error', message: err.toString() }))
-      .setMimeType(ContentService.MimeType.JSON);
-  }
-}
-
-function doGet(e) {
-  try {
-    const folder = getOrCreateFolder();
-    const files = folder.getFilesByName(JSON_FILE);
-    if (!files.hasNext()) {
-      return ContentService.createTextOutput(JSON.stringify({ status: 'empty', message: 'No backup found on Google Drive' }))
-        .setMimeType(ContentService.MimeType.JSON);
-    }
-    const content = files.next().getBlob().getDataAsString('UTF-8');
-    return ContentService.createTextOutput(content).setMimeType(ContentService.MimeType.JSON);
-  } catch (err) {
-    return ContentService.createTextOutput(JSON.stringify({ status: 'error', message: err.toString() }))
-      .setMimeType(ContentService.MimeType.JSON);
-  }
-}`;
 
 function getCloudConfig() {
     try {
@@ -3278,11 +3190,10 @@ function getCloudConfig() {
         return {
             githubToken: (raw.githubToken || '').trim(),
             githubGistId: (raw.githubGistId || '').trim(),
-            gdriveUrl: (raw.gdriveUrl || '').trim(),
             syncTradesToo: raw.syncTradesToo !== false
         };
     } catch {
-        return { githubToken: '', githubGistId: '', gdriveUrl: '', syncTradesToo: true };
+        return { githubToken: '', githubGistId: '', syncTradesToo: true };
     }
 }
 
@@ -3315,8 +3226,6 @@ function showCloudToast(msg) {
 }
 
 function initCloudSyncSystem() {
-    const codeEl = document.getElementById('gasCodePreview');
-    if (codeEl) codeEl.textContent = GAS_WEBAPP_CODE;
     renderCloudStatusUI();
 
     document.getElementById('cloudSettingsModal')?.addEventListener('click', function(e) {
@@ -3346,8 +3255,6 @@ function renderCloudStatusUI() {
 
     const ghDot = document.getElementById('ghStatusDot');
     const ghTxt = document.getElementById('ghStatusText');
-    const gdDot = document.getElementById('gdStatusDot');
-    const gdTxt = document.getElementById('gdStatusText');
     const globalBadge = document.getElementById('cloudGlobalBadge');
 
     if (ghDot && ghTxt) {
@@ -3369,27 +3276,8 @@ function renderCloudStatusUI() {
         }
     }
 
-    if (gdDot && gdTxt) {
-        if (!cfg.gdriveUrl) {
-            gdDot.className = 'cloud-dot';
-            gdTxt.textContent = 'غير مفعل ⚙️';
-        } else if (st.gdStatus === 'syncing') {
-            gdDot.className = 'cloud-dot syncing';
-            gdTxt.textContent = 'جاري الرفع ⏳...';
-        } else if (st.gdStatus === 'error') {
-            gdDot.className = 'cloud-dot err';
-            gdTxt.textContent = 'خطأ: ' + (st.gdError || 'تحقق من الرابط');
-        } else if (st.gdLastSync) {
-            gdDot.className = 'cloud-dot ok';
-            gdTxt.textContent = 'متزامن ✅ ' + st.gdLastSync;
-        } else {
-            gdDot.className = 'cloud-dot warn';
-            gdTxt.textContent = 'جاهز للرفع';
-        }
-    }
-
     if (globalBadge) {
-        if (!cfg.githubToken && !cfg.gdriveUrl) {
+        if (!cfg.githubToken) {
             globalBadge.textContent = 'بانتظار الإعداد ⚙️';
             globalBadge.className = 'badge badge-expense';
         } else if (st.pendingSync) {
@@ -3513,35 +3401,12 @@ async function syncToGitHub(payload, cfg) {
     return { ok: true };
 }
 
-async function syncToGoogleDrive(payload, cfg) {
-    if (!cfg.gdriveUrl) return { skipped: true };
-    setCloudState({ gdStatus: 'syncing', gdError: '' });
-
-    const res = await fetch(cfg.gdriveUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(payload)
-    });
-
-    if (!res.ok) {
-        throw new Error('HTTP ' + res.status);
-    }
-    const data = await res.json();
-    if (data.status && data.status !== 'ok' && data.status !== 'skipped_empty') {
-        throw new Error(data.message || 'Script Error');
-    }
-
-    const ts = new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
-    setCloudState({ gdStatus: 'ok', gdLastSync: ts, gdError: '' });
-    return { ok: true };
-}
-
 function triggerAutoCloudBackup(mode = 'auto') {
     const cfg = getCloudConfig();
-    if (!cfg.githubToken && !cfg.gdriveUrl) {
+    if (!cfg.githubToken) {
         if (mode === 'manual') {
             openCloudSettingsModal();
-            showCloudToast('⚙️ قم بإدخال إعدادات GitHub أو Google Drive أولاً');
+            showCloudToast('⚙️ قم بإدخال إعدادات GitHub أولاً');
         }
         return;
     }
@@ -3582,27 +3447,15 @@ function triggerAutoCloudBackup(mode = 'auto') {
                     })
             );
         }
-        if (cfg.gdriveUrl) {
-            tasks.push(
-                syncToGoogleDrive(payload, cfg)
-                    .then(() => { syncedCount++; })
-                    .catch(err => {
-                        anyError = true;
-                        setCloudState({ gdStatus: 'error', gdError: err.message });
-                    })
-            );
-        }
 
         await Promise.allSettled(tasks);
         isCloudSyncing = false;
         setCloudState({ pendingSync: anyError });
 
         if (!anyError && syncedCount > 0) {
-            showCloudToast(syncedCount === 2
-                ? '☁️✅ تم تحديث النسخة الاحتياطية في GitHub و Google Drive!'
-                : '☁️✅ تم تحديث النسخة الاحتياطية في السحابة!');
+            showCloudToast('☁️✅ تم تحديث النسخة الاحتياطية في GitHub!');
         } else if (anyError && mode === 'manual') {
-            showCloudToast('⚠️ تعذّر الرفع لإحدى السحابتين — راجع حالة الربط');
+            showCloudToast('⚠️ تعذّر الرفع إلى GitHub — راجع حالة الربط');
         }
     }, mode === 'manual' ? 50 : 400);
 }
@@ -3612,17 +3465,13 @@ function populateSettingsTab() {
     const cfg = getCloudConfig();
     const ghTok = document.getElementById('cfgGithubToken');
     const ghGist = document.getElementById('cfgGithubGistId');
-    const gdUrl = document.getElementById('cfgGDriveUrl');
     const syncTr = document.getElementById('cfgSyncTradesToo');
     if (ghTok) ghTok.value = cfg.githubToken;
     if (ghGist) ghGist.value = cfg.githubGistId;
-    if (gdUrl) gdUrl.value = cfg.gdriveUrl;
     if (syncTr) syncTr.checked = cfg.syncTradesToo !== false;
     syncExchangeBadgeHref();
     syncAutoProfitUI();
     applySectionsVisibilityUI();
-    const codeEl = document.getElementById('gasCodePreview');
-    if (codeEl && !codeEl.textContent) codeEl.textContent = GAS_WEBAPP_CODE;
 }
 function openCloudSettingsModal() {
     populateSettingsTab();
@@ -3631,34 +3480,21 @@ function openCloudSettingsModal() {
 function closeCloudSettingsModal() {
     // Kept for backward compatibility
 }
-function toggleGDriveGuide() {
-    const box = document.getElementById('gdriveGuideBox');
-    if (box) box.style.display = box.style.display === 'none' ? 'block' : 'none';
-}
-function copyGasCode() {
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(GAS_WEBAPP_CODE).then(() => showCloudToast('📋 تم نسخ كود Google Apps Script بنجاح!'));
-    } else {
-        fallbackCopy(GAS_WEBAPP_CODE);
-        showCloudToast('📋 تم نسخ كود Google Apps Script بنجاح!');
-    }
-}
 function saveCloudSettings() {
     saveExchangeBadgeUrl(false);
     const cfg = {
         githubToken: document.getElementById('cfgGithubToken').value.trim(),
         githubGistId: document.getElementById('cfgGithubGistId').value.trim(),
-        gdriveUrl: document.getElementById('cfgGDriveUrl').value.trim(),
         syncTradesToo: document.getElementById('cfgSyncTradesToo').checked
     };
     setCloudConfig(cfg);
     renderCloudStatusUI();
     closeCloudSettingsModal();
 
-    if (cfg.githubToken || cfg.gdriveUrl) {
+    if (cfg.githubToken) {
         // إذا كان الهاتف فارغاً (مثلاً بعد مسح المتصفح أو على هاتف جديد)، لا نرفع بيانات فارغة بل نفتح نافذة الاسترداد!
         if (cgtGetData().length === 0) {
-            showCloudToast('🛡️ تم حفظ الربط! سجل الهاتف فارغ، اختر السحابة لاسترداد نسختك 📥');
+            showCloudToast('🛡️ تم حفظ الربط! سجل الهاتف فارغ، يمكنك استرداد نسختك من GitHub 📥');
             openCloudRestoreModal();
         } else {
             triggerAutoCloudBackup('manual');
@@ -3814,32 +3650,6 @@ async function restoreFromGitHub() {
         applyRestoredPayload(payload, 'GitHub Cloud');
     } catch (err) {
         showAppAlert('⚠️ تعذّر الاسترداد من GitHub: ' + err.message);
-    }
-}
-
-async function restoreFromGoogleDrive() {
-    const cfg = getCloudConfig();
-    if (!cfg.gdriveUrl) {
-        closeCloudRestoreModal();
-        openCloudSettingsModal();
-        showAppAlert('أدخل رابط Google Drive Web App URL أولاً في إعدادات السحابة');
-        return;
-    }
-    try {
-        showCloudToast('⏳ جاري جلب النسخة الاحتياطية من Google Drive...');
-        const res = await fetch(cfg.gdriveUrl + '?action=restore&t=' + Date.now());
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        const payload = await res.json();
-        if (payload.status === 'empty') {
-            showAppAlert('ℹ️ لا توجد نسخة احتياطية محفوظة بعد على Google Drive');
-            return;
-        }
-        if (payload.status === 'error') {
-            throw new Error(payload.message || 'خطأ في السكربت');
-        }
-        applyRestoredPayload(payload, 'Google Drive');
-    } catch (err) {
-        showAppAlert('⚠️ تعذّر الاسترداد من Google Drive: ' + err.message);
     }
 }
 
@@ -4054,7 +3864,7 @@ function closeMemorySyncModal() {}
 async function autoPullLatestFromCloud(isManual = false) {
     if (!navigator.onLine) return;
     const cfg = getCloudConfig();
-    if (!cfg.githubToken && !cfg.gdriveUrl) return;
+    if (!cfg.githubToken) return;
 
     try {
         let remotePayload = null;
@@ -4084,17 +3894,6 @@ async function autoPullLatestFromCloud(isManual = false) {
                         remotePayload = safeJSON(fileObj.content, null);
                         sourceLabel = 'GitHub Cloud';
                     }
-                }
-            }
-        }
-
-        if (!remotePayload && cfg.gdriveUrl) {
-            const res = await fetch(cfg.gdriveUrl + '?action=restore&t=' + Date.now());
-            if (res.ok) {
-                const data = await res.json();
-                if (data && data.status !== 'empty' && data.status !== 'error') {
-                    remotePayload = data;
-                    sourceLabel = 'Google Drive';
                 }
             }
         }
